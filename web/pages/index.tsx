@@ -393,7 +393,14 @@ function RequestTable({ client }: { client: SupabaseClient }) {
               <tr className="text-slate-300" key={row.request_id}>
                 <td>{new Date(row.request_created_at).toLocaleString()}</td>
                 <td>{truncString(row.request_body.prompt, 15)}</td>
-                <td>{truncString(row.response_body.choices[0].text, 15)}</td>
+                <td>
+                  {truncString(
+                    row.response_body.choices
+                      ? row.response_body.choices[0].text
+                      : "{{ no reponse }}",
+                    15
+                  )}
+                </td>
                 <td>
                   {(
                     (new Date(row.response_created_at).getTime() -
@@ -402,7 +409,11 @@ function RequestTable({ client }: { client: SupabaseClient }) {
                   ).toString()}{" "}
                   s
                 </td>
-                <td>{row.response_body.usage.total_tokens}</td>
+                <td>
+                  {row.response_body.usage
+                    ? row.response_body.usage.total_tokens
+                    : "{{ no tokens found }}"}
+                </td>
                 <td>
                   <DocumentDuplicateIcon
                     className="h-5 w-5 text-slate-300 hover:cursor-pointer"
@@ -632,7 +643,7 @@ function OnBoarding({
           className="px-4 py-2 rounded-full text-slate-600 dark:text-slate-300 border border-slate-700 hover:bg-slate-700 hover:text-slate-100"
           onClick={() => {
             setAuthHash(
-              "1155382dfb904996467a32e42a28adf9cc0033b13874697d03527c09916a4bc7"
+              "80a74d0f20a32033a6c5176f0a9a42bca62de5890a3ec686d4bc9917d3b8866b"
             );
             setAuthPreview("Demo...Demo");
           }}
