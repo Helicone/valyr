@@ -370,6 +370,22 @@ function RequestTable({ client }: { client: SupabaseClient }) {
     fetch();
   }, [client]);
   console.log(data[0]);
+  const probabilities = data.map((d) => {
+    const choice = d.response_body.choices[0];
+    var prob;
+    console.log(choice)
+    console.log("UNDEFINED", choice.logprobs !== undefined)
+    if (choice.logprobs !== undefined && choice.logprobs !== null) {
+      console.log("IN THE CONDITION", choice.logprobs)
+      const tokenLogprobs = choice.logprobs.token_logprobs
+      const sum = tokenLogprobs.reduce((total: any, num: any) => total + num, 0);
+      prob = Math.pow(Math.E, sum);
+    } else {
+      prob = null;
+    }
+    return prob;
+  });
+
   return (
     <div className="h-full">
       <div>
@@ -385,11 +401,12 @@ function RequestTable({ client }: { client: SupabaseClient }) {
               <th className="text-left">Response</th>
               <th className="text-left">Duration</th>
               <th className="text-left">Token Count</th>
+              <th className="text-left">Probability</th>
               <th className="text-left">Copy</th>
             </tr>
           </thead>
           <tbody>
-            {data.map((row) => (
+            {data.map((row, i) => (
               <tr className="text-slate-300" key={row.request_id}>
                 <td>{new Date(row.request_created_at).toLocaleString()}</td>
                 <td>{truncString(row.request_body.prompt, 15)}</td>
@@ -414,6 +431,7 @@ function RequestTable({ client }: { client: SupabaseClient }) {
                     ? row.response_body.usage.total_tokens
                     : "{{ no tokens found }}"}
                 </td>
+                <td>{probabilities[i] !== null ? parseFloat(probabilities[i] * 100).toFixed(3) : null}{probabilities[i] !== null ? '%' : ""}</td>
                 <td>
                   <DocumentDuplicateIcon
                     className="h-5 w-5 text-slate-300 hover:cursor-pointer"
