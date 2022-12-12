@@ -97,39 +97,17 @@ export default {
     if (auth === null) {
       return new Response("Not authorization header found!", { status: 401 });
     }
+    const body = await request.text();
     const dbClient = createClient(
       env.SUPABASE_URL,
       env.SUPABASE_SERVICE_ROLE_KEY
     );
 
-    const body = await request.text();
-    var myBody = JSON.parse(body);
-   
-    const logProbs = myBody["logprobs"];
-
-    var requestModified;
-    var bodyModified;
-    if (logProbs === undefined) {
-      myBody["logprobs"] = 0;
-      const newRequestInit = {
-        body: JSON.stringify(myBody),
-      };
-      requestModified = new Request(request, newRequestInit)
-      bodyModified = await requestModified.text();
-
-      requestModified.headers.set('Content-Length', new Blob([bodyModified]).size.toString());
-    } else {
-      requestModified = request;
-      bodyModified = body;
-    }
-
     const [response, requestResult] = await Promise.all([
-      forwardRequestToOpenAi(requestModified, bodyModified),
+      forwardRequestToOpenAi(request, body),
       logRequest(dbClient, request, body, auth),
     ]);
-
     const responseBody = await response.text();
-
     if (requestResult.data !== null) {
       ctx.waitUntil(logResponse(dbClient, requestResult.data, responseBody));
     }

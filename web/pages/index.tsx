@@ -347,8 +347,8 @@ function truncString(str: string, n: number) {
 function middleTruncString(str: string, n: number) {
   return str.length > n
     ? str.substring(0, n / 2) +
-        "..." +
-        str.substring(str.length - n / 2, str.length)
+    "..." +
+    str.substring(str.length - n / 2, str.length)
     : str;
 }
 
@@ -371,12 +371,13 @@ function RequestTable({ client }: { client: SupabaseClient }) {
   }, [client]);
   console.log(data[0]);
   const probabilities = data.map((d) => {
-    const choice = d.response_body.choices[0];
+    const choice = d.response_body?.choices ? d.response_body?.choices[0] : null;
+    if (!choice) {
+      return null;
+    }
+
     var prob;
-    console.log(choice)
-    console.log("UNDEFINED", choice.logprobs !== undefined)
     if (choice.logprobs !== undefined && choice.logprobs !== null) {
-      console.log("IN THE CONDITION", choice.logprobs)
       const tokenLogprobs = choice.logprobs.token_logprobs
       const sum = tokenLogprobs.reduce((total: any, num: any) => total + num, 0);
       prob = Math.pow(Math.E, sum);
@@ -389,7 +390,7 @@ function RequestTable({ client }: { client: SupabaseClient }) {
   return (
     <div className="h-full">
       <div>
-        <span>Showing the most recent {} </span>
+        <span>Showing the most recent { } </span>
         <span className="font-thin text-xs">(max 1000)</span>
       </div>
       <div className="h-full overflow-y-auto mt-3">
