@@ -97,6 +97,7 @@ export default {
     if (auth === null) {
       return new Response("Not authorization header found!", { status: 401 });
     }
+    
     const body = await request.text();
     const dbClient = createClient(
       env.SUPABASE_URL,
