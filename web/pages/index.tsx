@@ -346,8 +346,8 @@ function truncString(str: string, n: number) {
 
 function middleTruncString(str: string, n: number) {
   return str.length > n
-      ? str.substring(0, n / 2) +
-      "..." +
+    ? str.substring(0, n / 2) +
+    "..." +
     str.substring(str.length - n / 2, str.length)
     : str;
 }
