@@ -221,23 +221,6 @@ function GraphAndCharts({ client }: { client: SupabaseClient }) {
                 Table
               </p>
             </div>
-            <div
-              className={
-                "flex flex-row gap-2 items-center px-10 rounded-full py-1 cursor-pointer " +
-                (showRequestTable && "dark:bg-slate-600 bg-slate-500")
-              }
-              onClick={() => setShowRequestTable(true)}
-            >
-              <p
-                className={
-                  showRequestTable
-                    ? "dark:text-slate-200 text-slate-100"
-                    : "dark:text-slate-100 "
-                }
-              >
-                Table
-              </p>
-            </div>
           </div>
         </div>
       </div>
