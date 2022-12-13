@@ -15,7 +15,6 @@ export function Logs({ client }: { client: SupabaseClient }) {
   const [logs, setLogs] = useState<Log[]>([]);
 
   useEffect(() => {
-    console.log("Fetching logs");
     const channel = client.channel("db-messages");
     channel.on(
       "postgres_changes",

@@ -12,7 +12,7 @@ import { DateMetrics } from "../components/timeGraph";
 import { Logo } from "../components/logo";
 import { RequestTable } from "../components/requestTable";
 import { MetricsPanel } from "../components/metricsPanel";
-import { Logs } from "../components/logPannel";
+import { Logs } from "../components/logPanel";
 import { OnBoarding } from "../components/onBoarding";
 import { ResetAPIKey } from "../components/resetAPIKey";
 
