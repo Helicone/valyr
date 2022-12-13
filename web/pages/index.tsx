@@ -347,8 +347,8 @@ function truncString(str: string, n: number) {
 function middleTruncString(str: string, n: number) {
   return str.length > n
     ? str.substring(0, n / 2) +
-    "..." +
-    str.substring(str.length - n / 2, str.length)
+        "..." +
+        str.substring(str.length - n / 2, str.length)
     : str;
 }
 
@@ -371,26 +371,33 @@ function RequestTable({ client }: { client: SupabaseClient }) {
   }, [client]);
   console.log(data[0]);
   const probabilities = data.map((d) => {
-    const choice = d.response_body?.choices ? d.response_body?.choices[0] : null;
+    const choice = d.response_body?.choices
+      ? d.response_body?.choices[0]
+      : null;
     if (!choice) {
       return null;
     }
 
     var prob;
     if (choice.logprobs !== undefined && choice.logprobs !== null) {
-      const tokenLogprobs = choice.logprobs.token_logprobs
-      const sum = tokenLogprobs.reduce((total: any, num: any) => total + num, 0);
+      const tokenLogprobs = choice.logprobs.token_logprobs;
+      const sum = tokenLogprobs.reduce(
+        (total: any, num: any) => total + num,
+        0
+      );
       prob = Math.pow(Math.E, sum);
+      prob = (prob * 100).toFixed(3).concat("%");
     } else {
-      prob = null;
+      prob = "";
     }
+
     return prob;
   });
 
   return (
     <div className="h-full">
       <div>
-        <span>Showing the most recent { } </span>
+        <span>Showing the most recent {} </span>
         <span className="font-thin text-xs">(max 1000)</span>
       </div>
       <div className="h-full overflow-y-auto mt-3">
@@ -432,7 +439,7 @@ function RequestTable({ client }: { client: SupabaseClient }) {
                     ? row.response_body.usage.total_tokens
                     : "{{ no tokens found }}"}
                 </td>
-                <td>{probabilities[i] !== null ? parseFloat(probabilities[i] * 100).toFixed(3) : null}{probabilities[i] !== null ? '%' : ""}</td>
+                <td>{probabilities[i]}</td>
                 <td>
                   <DocumentDuplicateIcon
                     className="h-5 w-5 text-slate-300 hover:cursor-pointer"
