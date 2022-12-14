@@ -20,7 +20,7 @@ export function OnBoarding({
         <div className="border-[1px] border-slate-700 rounded-lg px-5 py-3 flex flex-col items-center">
           <h3 className="text-xl mb-5">Replace your OpenAI url</h3>
           <code className="bg-slate-800 p-1  px-3 text-md  text-slate-200">
-            api.openai.com/v1
+            oai.valyrai.com/v1
           </code>
           <ArrowDownIcon className="h-4" />
           <code className="bg-slate-800 py-1  px-3 text-md text-slate-200 ">
