@@ -19,6 +19,7 @@ import { ResetAPIKey } from "../components/resetAPIKey";
 import Step from "../components/common/step";
 import Image from "next/image";
 import { middleTruncString } from "../lib/stringHelpers";
+import { UserTable } from "../components/userTable";
 
 function getStorageValue<T>(key: string, defaultValue: T) {
   const saved =
@@ -277,55 +278,59 @@ function LoggedInFlow({
 }
 
 function GraphAndCharts({ client }: { client: SupabaseClient }) {
-  const [showRequestTable, setShowRequestTable] = useState(false);
+  type View = "Graph" | "Requests" | "Users";
+
+  const [currentView, setCurrentView] = useState<View>("Graph");
+
+  const differentViews: {
+    name: View;
+    component: JSX.Element;
+  }[] = [
+    {
+      name: "Graph",
+      component: <TimeGraphWHeader client={client} />,
+    },
+    {
+      name: "Requests",
+      component: <RequestTable client={client} />,
+    },
+    {
+      name: "Users",
+      component: <UserTable client={client} />,
+    },
+  ];
+
   return (
     <>
       <div className="h-[10%] w-full pl-10 flex flex-col gap-3 mt-4">
         <div className="flex flex-row gap-5 items-center">
           <div className="border-2 dark:border-none dark:bg-slate-800 rounded-full flex flex-row gap-2">
-            <div
-              className={
-                "flex flex-row gap-2 items-center px-10 rounded-full py-1 cursor-pointer " +
-                (showRequestTable || "dark:bg-slate-600 bg-slate-500")
-              }
-              onClick={() => setShowRequestTable(false)}
-            >
-              <p
+            {differentViews.map((view) => (
+              <div
                 className={
-                  showRequestTable
-                    ? "dark:text-slate-100 "
-                    : "dark:text-slate-200 text-slate-100"
+                  "flex flex-row gap-2 items-center px-10 rounded-full py-1 cursor-pointer " +
+                  (view.name !== currentView ||
+                    "dark:bg-slate-600 bg-slate-500")
                 }
+                onClick={() => setCurrentView(view.name)}
+                key={view.name}
               >
-                Graph
-              </p>
-            </div>
-            <div
-              className={
-                "flex flex-row gap-2 items-center px-10 rounded-full py-1 cursor-pointer " +
-                (showRequestTable && "dark:bg-slate-600 bg-slate-500")
-              }
-              onClick={() => setShowRequestTable(true)}
-            >
-              <p
-                className={
-                  showRequestTable
-                    ? "dark:text-slate-200 text-slate-100"
-                    : "dark:text-slate-100 "
-                }
-              >
-                Table
-              </p>
-            </div>
+                <p
+                  className={
+                    view.name === currentView
+                      ? "dark:text-slate-100 "
+                      : "dark:text-slate-200 text-slate-100"
+                  }
+                >
+                  {view.name}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
       <div className="w-full h-[90%] py-5">
-        {showRequestTable ? (
-          <RequestTable client={client} />
-        ) : (
-          <TimeGraphWHeader client={client} />
-        )}
+        {differentViews.find((view) => view.name === currentView)?.component}
       </div>
     </>
   );
