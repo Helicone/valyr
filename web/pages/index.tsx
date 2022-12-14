@@ -183,6 +183,7 @@ export default function Home() {
                   height={250}
                 />
                 <button
+                  disabled={apiKey === ""}
                   onClick={() => {
                     setAuthPreview(middleTruncString(apiKey, 8));
                     hashAuth(apiKey).then((hash) => setAuthHash(hash));
