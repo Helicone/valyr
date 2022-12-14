@@ -3,16 +3,17 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { truncString } from "../lib/stringHelpers";
 
-interface ResponseAndRequest {
+interface UserMetricsDB {
   user_id: string;
+  first_active: string;
   last_active: string;
   total_requests: string;
-  average_requests_per_day: string;
+  average_requests_per_day_active: string;
   average_tokens_per_request: string;
 }
 
 export function UserTable({ client }: { client: SupabaseClient }) {
-  const [data, setData] = useState<ResponseAndRequest[]>([]);
+  const [data, setData] = useState<UserMetricsDB[]>([]);
   useEffect(() => {
     const fetch = async () => {
       const { data, error } = await client
@@ -41,6 +42,7 @@ export function UserTable({ client }: { client: SupabaseClient }) {
           <thead>
             <tr className="text-slate-300">
               <th className="text-left">User ID</th>
+              <th className="text-left">Active for</th>
               <th className="text-left">Last Active</th>
               <th className="text-left">Total requests</th>
               <th className="text-left">AVG(requests/day)</th>
@@ -55,9 +57,26 @@ export function UserTable({ client }: { client: SupabaseClient }) {
                 key={row.user_id ? truncString(row.user_id, 11) : "NULL"}
               >
                 <td>{row.user_id ? truncString(row.user_id, 11) : "NULL"}</td>
+                <td>
+                  {(
+                    (new Date().getTime() -
+                      new Date(row.first_active).getTime()) /
+                    (1000 * 3600 * 24)
+                  ).toFixed(2)}{" "}
+                  days
+                </td>
                 <td>{new Date(row.last_active).toLocaleString()}</td>
                 <td>{row.total_requests}</td>
-                <td>{row.average_requests_per_day}</td>
+                <td>
+                  {(
+                    +row.total_requests /
+                    Math.ceil(
+                      (new Date().getTime() -
+                        new Date(row.first_active).getTime()) /
+                        (1000 * 3600 * 24)
+                    )
+                  ).toFixed(2)}
+                </td>
                 <td>
                   {row.average_tokens_per_request
                     ? (+row.average_tokens_per_request).toFixed(2)
