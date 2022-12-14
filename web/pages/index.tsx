@@ -188,7 +188,11 @@ export default function Home() {
                     setAuthPreview(middleTruncString(apiKey, 8));
                     hashAuth(apiKey).then((hash) => setAuthHash(hash));
                   }}
-                  className="items-center rounded-md border border-slate-700 bg-slate-800 px-4 py-2 text-white hover:bg-slate-600 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 mt-2"
+                  className={`items-center rounded-md border border-slate-700 ${
+                    apiKey === ""
+                      ? "bg-slate-400 hover:cursor-not-allowed"
+                      : "bg-slate-800 hover:cursor-pointer hover:bg-slate-600"
+                  } px-4 py-2 text-white focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 mt-2`}
                 >
                   View Dashboard
                 </button>
