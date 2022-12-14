@@ -3,19 +3,22 @@ import {
   ArrowUpIcon,
   ExclamationCircleIcon,
   InformationCircleIcon,
+  PlusIcon,
+  MinusIcon,
 } from "@heroicons/react/24/solid";
 import { SupabaseClient } from "@supabase/supabase-js";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { supabaseClient } from "../lib/supabaseClient";
+import { hashAuth, supabaseClient } from "../lib/supabaseClient";
 import { DateMetrics } from "../components/timeGraph";
 import { Logo } from "../components/logo";
 import { RequestTable } from "../components/requestTable";
 import { MetricsPanel } from "../components/metricsPanel";
 import { Logs } from "../components/logPanel";
-import { OnBoarding } from "../components/onBoarding";
 import { ResetAPIKey } from "../components/resetAPIKey";
 import Step from "../components/common/step";
+import Image from "next/image";
+import { middleTruncString } from "../lib/stringHelpers";
 
 function getStorageValue<T>(key: string, defaultValue: T) {
   const saved =
@@ -52,6 +55,8 @@ export default function Home() {
   );
 
   const [client, setClient] = useState<SupabaseClient | null>(null);
+
+  const [apiKey, setApiKey] = useState<string>("");
 
   useEffect(() => {
     if (authHash !== null) {
@@ -96,24 +101,97 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="font-extralight text-3xl mb-12 text-center">
-              Simplify GPT-3 monitoring with one line of code
+            <div className="font-extralight text-3xl mb-8 text-center">
+              Simplify GPT-3 monitoring with{" "}
+              <span className="font-semibold">one</span> line of code
             </div>
-            <div className="flex flex-row gap-8">
+            <button
+              onClick={() => {
+                setAuthHash(
+                  "1155382dfb904996467a32e42a28adf9cc0033b13874697d03527c09916a4bc7"
+                );
+                setAuthPreview("Demo...Demo");
+              }}
+              className="items-center rounded-md border border-slate-700 bg-slate-800 px-4 py-2 text-white hover:bg-slate-600 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 mb-16"
+            >
+              View Demo
+            </button>
+            <div className="flex flex-col md:flex-row gap-12 md:gap-8">
               <Step stepNumber={1} label="Replace <base url, SDK>">
-                <h1>Hello World</h1>
+                <div
+                  className="flex flex-row"
+                  style={{ backgroundColor: "rgba(229, 83, 75, 0.15)" }}
+                >
+                  <MinusIcon className="h-4 mt-3 mx-2" />
+                  <code
+                    className="py-2 px-4 text-md  text-slate-200"
+                    style={{ backgroundColor: "rgba(229, 83, 75, 0.15)" }}
+                  >
+                    <span
+                      className="p-1 rounded-md"
+                      style={{ backgroundColor: "rgba(229,83,75,0.4)" }}
+                    >
+                      api.openai
+                    </span>
+                    .com/v1
+                  </code>
+                </div>
+
+                <ArrowDownIcon className="h-4 my-2" />
+                <div
+                  className="flex flex-row"
+                  style={{ backgroundColor: "rgba(70,149,74,0.15)" }}
+                >
+                  <PlusIcon className="h-4 mt-3 mx-2" />
+                  <code
+                    className="py-2 px-4 text-md  text-slate-200"
+                    style={{ backgroundColor: "rgba(70,149,74,0.15)" }}
+                  >
+                    <span
+                      className="p-1 rounded-md"
+                      style={{ backgroundColor: "rgba(70,149,74,0.4)" }}
+                    >
+                      oai.valyrai
+                    </span>
+                    .com/v1
+                  </code>
+                </div>
               </Step>
-              <Step stepNumber={2} label="View requests in dashboard">
-                <h1>Hello World</h1>
+              <Step stepNumber={2} label="Paste your OpenAI API Key">
+                <div className="flex flex-col items-end">
+                  <input
+                    className="bg-slate-800 py-2 px-4 rounded-md"
+                    type="password"
+                    placeholder="Your OpenAI API key"
+                    value={apiKey}
+                    onChange={(e) => {
+                      setApiKey(e.target.value);
+                    }}
+                  />
+                </div>
+                <i className="text-sm text-slate-600 dark:text-slate-300 flex flex-row items-center mt-4">
+                  <InformationCircleIcon className="h-5 mx-1" />
+                  your key is never stored on our servers
+                </i>
               </Step>
-              <Step stepNumber={3} label="Add data for A/B testing">
-                <h1>Hello World</h1>
+              <Step stepNumber={3} label="View requests in dashboard">
+                <Image
+                  src="/assets/demo-dashboard.png"
+                  alt="Dashboard Image"
+                  width={250}
+                  height={250}
+                />
+                <button
+                  onClick={() => {
+                    setAuthPreview(middleTruncString(apiKey, 8));
+                    hashAuth(apiKey).then((hash) => setAuthHash(hash));
+                  }}
+                  className="items-center rounded-md border border-slate-700 bg-slate-800 px-4 py-2 text-white hover:bg-slate-600 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 mt-2"
+                >
+                  View Dashboard
+                </button>
               </Step>
             </div>
-            <OnBoarding
-              setAuthHash={setAuthHash}
-              setAuthPreview={setAuthPreview}
-            />
           </div>
         )}
       </main>
