@@ -10,6 +10,7 @@ import { MetricsPanel } from "../components/metricsPanel";
 import { Logs } from "../components/logPanel";
 import { OnBoarding } from "../components/onBoarding";
 import { ResetAPIKey } from "../components/resetAPIKey";
+import { UserTable } from "../components/userTable";
 
 function getStorageValue<T>(key: string, defaultValue: T) {
   const saved =
@@ -194,7 +195,7 @@ function GraphAndCharts({ client }: { client: SupabaseClient }) {
     },
     {
       name: "Users",
-      component: <RequestTable client={client} />,
+      component: <UserTable client={client} />,
     },
   ];
 
