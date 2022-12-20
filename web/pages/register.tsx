@@ -19,6 +19,9 @@ const Login = (props: LoginProps) => {
           .signUp({
             email: state.email,
             password: state.password,
+            options: {
+              emailRedirectTo: `${window.location.origin}`,
+            },
           })
           .then((res) => {
             if (res.error) {
