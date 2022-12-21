@@ -1,4 +1,5 @@
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 export default function NavBar() {
@@ -30,19 +31,19 @@ export default function NavBar() {
         <div className="flex flex-row justify-end items-center gap-5">
           {!user ? (
             <>
-              <a
+              <Link
                 className="text-sm font-semibold ml-2 hover:cursor-pointer"
                 href="/login"
               >
                 Login
-              </a>
+              </Link>
               {" / "}
-              <a
+              <Link
                 className="text-sm font-semibold ml-2 hover:cursor-pointer"
                 href="/register"
               >
                 Signup
-              </a>
+              </Link>
             </>
           ) : (
             <>

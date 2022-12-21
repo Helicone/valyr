@@ -16,7 +16,7 @@ import { Logo } from "../components/logo";
 import { RequestTable } from "../components/requestTable";
 import { MetricsPanel } from "../components/metricsPanel";
 import { Logs } from "../components/logPanel";
-import { ResetAPIKey } from "../components/resetAPIKey";
+
 import Step from "../components/common/step";
 import Image from "next/image";
 import { middleTruncString } from "../lib/stringHelpers";
@@ -25,6 +25,7 @@ import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { Database } from "../supabase/database.types";
 import { useRouter } from "next/router";
 import { useKeys } from "../lib/useKeys";
+import Link from "next/link";
 
 function getStorageValue<T>(key: string, defaultValue: T) {
   const saved =
@@ -271,15 +272,15 @@ function Step2({
             <div className="flex flex-row gap-1">
               <a>
                 You have{" "}
-                <a href="/settings/keys" className="text-indigo-400">
+                <Link href="/settings/keys" className="text-indigo-400">
                   {apiKeys.length} key
                   {apiKeys.length === 1 ? "" : "s"}
-                </a>
+                </Link>
                 , view
-                <a className="text-indigo-400" href="/dashboard">
+                <Link className="text-indigo-400" href="/dashboard">
                   {" "}
                   dashboard
-                </a>
+                </Link>
                 .
               </a>
               <a></a>

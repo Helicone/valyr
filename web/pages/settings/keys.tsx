@@ -150,7 +150,7 @@ function Step2() {
       {apiKeys.map((key) => (
         <div
           className="flex flex-row gap-1 items-center justify-between max-w-sm"
-          key={key.id}
+          key={key.api_key_hash}
         >
           <div className="flex flex-row justify-between w-full">
             <a className="text-slate-400">{key.api_key_preview}</a>
