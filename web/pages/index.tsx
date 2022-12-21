@@ -75,7 +75,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="items-center pt-5 pb-12 md:h-screen min-h-screen">
+      <main className="items-center pt-5 pb-12 ">
         <div className="flex flex-col md:items-center p-4 md:p-0 items-center">
           <div className="my-8 mt-8 sm:mt-36">
             <div className="hidden md:flex md:flex-row gap-5 items-center">
