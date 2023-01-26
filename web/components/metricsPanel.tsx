@@ -1,35 +1,46 @@
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { MetricsDB } from "../schema/metrics";
+import { Database } from "../supabase/database.types";
 
-export function MetricsPanel({ client }: { client: SupabaseClient }) {
+export function MetricsPanel() {
+  const client = useSupabaseClient<Database>();
   interface Metrics {
-    request_today: number;
-    average_requests_per_day: number;
-    average_response_time: number;
-    average_tokens_per_request: number;
-    average_tokens_per_response: number;
-    average_cost_per_request: number;
-    total_requests: number;
+    average_requests_per_day?: number;
+    average_response_time?: number;
+    average_tokens_per_request?: number;
+    average_tokens_per_response?: number;
+    average_cost_per_request?: number;
+    total_requests?: number;
+    first_request?: Date;
+    last_request?: Date;
   }
 
-  const [data, setData] = useState<Metrics | null>(null);
-  console.log("data", data);
+  const [data, setData] = useState<Metrics>({});
+
+  const numberOfDaysActive = !data?.first_request
+    ? null
+    : Math.floor(
+        (new Date().getTime() - (data.first_request!.getTime() ?? 0)) /
+          (86400 * 1000) +
+          1
+      );
+
   const metrics = [
     {
-      value: data?.request_today ?? "n/a",
-      label: "Requests today",
-    },
-    {
-      value: data?.average_requests_per_day.toFixed(3) ?? "n/a",
+      value:
+        numberOfDaysActive && data?.total_requests
+          ? (data?.total_requests / numberOfDaysActive).toFixed(3)
+          : "n/a",
       label: "Average requests per day",
     },
     {
-      value: data?.average_response_time.toFixed(3) ?? "n/a",
+      value: data.average_response_time?.toFixed(3) ?? "n/a",
       label: "Average response time",
     },
     {
-      value: data?.average_tokens_per_response.toFixed(3) ?? "n/a",
+      value: data?.average_tokens_per_response?.toFixed(3) ?? "n/a",
       label: "Average # of Token/response",
     },
     {
@@ -43,35 +54,64 @@ export function MetricsPanel({ client }: { client: SupabaseClient }) {
   ];
   useEffect(() => {
     const fetch = async () => {
-      const { count: requestToday, error: requestTodayError } = await client
-        .from("response")
-        .select("*", {
-          count: "exact",
-          head: true,
-        })
-        .gte("created_at", new Date().toISOString().split("T")[0])
-        .order("created_at", { ascending: false });
-
-      const {
-        data: metrics,
-        error: metricsError,
-      }: { data: MetricsDB | null; error: PostgrestError | null } = await client
-        .from("metrics")
-        .select("*")
-        .single();
-
-      if (metricsError !== null) {
-        console.error(metricsError);
-      } else if (requestTodayError !== null) {
-        console.error(requestTodayError);
-      } else {
-        setData({
-          request_today: requestToday!, //TODO
-          average_cost_per_request: undefined!,
-          ...metrics!,
+      client
+        .from("request_rbac")
+        .select("*", { count: "exact" })
+        .then((res) => {
+          setData((data) => ({ ...data, total_requests: res.count ?? 0 }));
         });
-      }
+      client
+        .from("request_rbac")
+        .select("*")
+        .order("created_at", { ascending: true })
+        .limit(1)
+        .single()
+        .then(({ data: createdAt }) => {
+          setData((data) => {
+            if (createdAt) {
+              return {
+                ...data,
+                first_request: new Date(createdAt.created_at) ?? null,
+              };
+            }
+            return data;
+          });
+        });
+      client
+        .from("request_rbac")
+        .select("created_at")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .single()
+        .then(({ data: createdAt }) => {
+          setData((data) => {
+            if (createdAt) {
+              return {
+                ...data,
+                last_request: new Date(createdAt.created_at) ?? null,
+              };
+            }
+            return data;
+          });
+        });
+
+      client
+        .from("metrics_rbac")
+        .select("*")
+        .limit(1)
+        .single()
+        .then(({ data: metrics }) => {
+          if (metrics) {
+            setData((data) => ({
+              ...data,
+              average_response_time: metrics.average_response_time ?? undefined,
+              average_tokens_per_response:
+                metrics.average_tokens_per_response ?? undefined,
+            }));
+          }
+        });
     };
+
     fetch();
   }, [client]);
 

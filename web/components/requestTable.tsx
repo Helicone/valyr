@@ -2,36 +2,40 @@ import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { truncString } from "../lib/stringHelpers";
+import { Database } from "../supabase/database.types";
 
-interface ResponseAndRequest {
-  response_body: any;
-  response_id: string;
-  response_created_at: string;
-  request_id: string;
-  request_body: any;
-  request_path: string;
-  request_created_at: string;
-  request_user_id: string;
-}
+type ResponseAndRequest = Omit<
+  Database["public"]["Views"]["response_and_request"]["Row"],
+  "response_body" | "request_body"
+> & {
+  response_body: {
+    choices: any[] | null | undefined;
+    usage:
+      | {
+          total_tokens: number;
+        }
+      | null
+      | undefined;
+  } | null;
+  request_body: {
+    prompt: string;
+  } | null;
+};
 
-export function RequestTable({ client }: { client: SupabaseClient }) {
+export function RequestTable({ client }: { client: SupabaseClient<Database> }) {
   const [data, setData] = useState<ResponseAndRequest[]>([]);
 
   useEffect(() => {
     const fetch = async () => {
       const { data, error } = await client
-        .from("response_and_request")
+        .from("response_and_request_rbac")
         .select("*")
         .order("request_created_at", { ascending: false })
-        // .is(
-        //   "request_path",
-        //   "https://valyr-worker-prod.pzero.workers.dev/v1/completions"
-        // )
-        .limit(1000);
+        .limit(100);
       if (error) {
         console.log(error);
       } else {
-        setData(data);
+        setData(data as ResponseAndRequest[]);
       }
     };
     fetch();
@@ -65,7 +69,7 @@ export function RequestTable({ client }: { client: SupabaseClient }) {
     <div className="h-full">
       <div>
         <span>Showing the most recent {} </span>
-        <span className="font-thin text-xs">(max 1000)</span>
+        <span className="font-thin text-xs">(max 100)</span>
       </div>
       <div className="h-full overflow-y-auto mt-3">
         <table className="w-full mt-5 table-auto ">
@@ -84,27 +88,31 @@ export function RequestTable({ client }: { client: SupabaseClient }) {
           <tbody>
             {data.map((row, i) => (
               <tr className="text-slate-300" key={row.request_id}>
-                <td>{new Date(row.request_created_at).toLocaleString()}</td>
-                <td>{truncString(row.request_body.prompt, 15)}</td>
+                <td>{new Date(row.request_created_at!).toLocaleString()}</td>
+                <td>
+                  {row.request_body?.prompt
+                    ? truncString(row.request_body.prompt, 15)
+                    : "{{no prompt }}"}
+                </td>
                 <td>
                   {truncString(
-                    row.response_body.choices
-                      ? row.response_body.choices[0].text
+                    row.response_body!.choices
+                      ? row.response_body!.choices[0].text
                       : "{{ no reponse }}",
                     15
                   )}
                 </td>
                 <td>
                   {(
-                    (new Date(row.response_created_at).getTime() -
-                      new Date(row.request_created_at).getTime()) /
+                    (new Date(row.response_created_at!).getTime() -
+                      new Date(row.request_created_at!).getTime()) /
                     1000
                   ).toString()}{" "}
                   s
                 </td>
                 <td>
-                  {row.response_body.usage
-                    ? row.response_body.usage.total_tokens
+                  {row.response_body!.usage
+                    ? row.response_body!.usage.total_tokens
                     : "{{ no tokens found }}"}
                 </td>
                 <td>{probabilities[i]}</td>

@@ -4,6 +4,7 @@ import {
   MinusIcon,
   PlusIcon,
 } from "@heroicons/react/24/solid";
+import { useUser } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import NavBar from "../components/shared/navBar";
@@ -14,6 +15,10 @@ const Home = (props: HomeProps) => {
   const {} = props;
 
   const router = useRouter();
+
+  const user = useUser();
+
+  console.log("User!: " + user?.id);
 
   return (
     <div className="px-4 sm:px-16 flex flex-col h-screen w-screen bg-gray-300">
