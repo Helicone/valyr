@@ -22,11 +22,16 @@ function forwardRequestToOpenAi(
 ): Promise<Response> {
   let url = new URL(request.url);
   const new_url = new URL(`https://api.openai.com${url.pathname}`);
-  return fetch(new_url.href, {
-    method: request.method,
-    headers: request.headers,
-    body,
-  });
+  return request.method === "GET"
+    ? fetch(new_url.href, {
+        method: request.method,
+        headers: request.headers,
+      })
+    : fetch(new_url.href, {
+        method: request.method,
+        headers: request.headers,
+        body,
+      });
 }
 
 async function logRequest({
