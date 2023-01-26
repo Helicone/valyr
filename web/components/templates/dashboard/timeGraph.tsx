@@ -13,13 +13,13 @@ import {
   fetchLastXTimeData,
   TimeData,
   TimeIncrement,
-} from "../lib/fetchTimeData";
+} from "../../../lib/fetchTimeData";
 import {
   getXDaysAgoFloored,
   getXHoursAgoFloored,
   getXMinuteasAgoFloored,
-} from "../lib/getXHoursAgo";
-import { classNames } from "../lib/tsxHelpers";
+} from "../../../lib/getXHoursAgo";
+import { classNames } from "../../../lib/tsxHelpers";
 
 const RenderLineChart = ({
   data,
@@ -89,9 +89,8 @@ export function DateMetrics({ client }: { client: SupabaseClient }) {
   const [data, setData] = useState<TimeData[]>([]);
   const pillStyle = "px-2 py-1 rounded-full text-xs cursor-pointer";
 
-  const selectedPillStyle =
-    "bg-slate-600 text-slate-200 dark:bg-slate-700 dark:text-slate-100 hover:bg-slate-600 hover:text-slate-100";
-  const unselectedPillStyle = "dark:text-slate-300  border-slate-700 border";
+  const selectedPillStyle = "bg-black text-white";
+  const unselectedPillStyle = "border border-black bg-white text-black";
 
   const getStyle = (tL: TimeLength) =>
     classNames(

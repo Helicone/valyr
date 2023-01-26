@@ -91,7 +91,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   };
 
   return (
-    <div className="px-4 sm:px-16 flex flex-col h-screen w-screen bg-gray-300">
+    <div className="px-4 sm:px-16 flex flex-col h-screen w-screen bg-gray-200">
       <NavBar />
       <div className="h-full justify-center align-middle items-center flex flex-col space-y-6 sm:space-y-12">
         <ProgressBar currentStep={step} />

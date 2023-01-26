@@ -1,31 +1,38 @@
 /* eslint-disable @next/next/no-img-element */
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment } from "react";
 import { clsx } from "./clsx";
 
-interface NavBarProps {}
+interface NavBarProps {
+  background?: "white" | "gray";
+}
 
 const NavBar = (props: NavBarProps) => {
-  const {} = props;
+  const { background = "gray" } = props;
+  const supabaseClient = useSupabaseClient();
   const router = useRouter();
+  const user = useUser();
   const { pathname } = router;
 
   const paths = [
     { name: "Home", path: "/home", active: pathname === "/home" },
     {
       name: "Dashboard",
-      path: "/dashbaord",
+      path: "/dashboard",
       active: pathname === "/dashboard",
     },
     { name: "About", path: "/about", active: pathname === "/about" },
   ];
-  console.log(router.pathname);
 
   return (
-    <Disclosure as="nav" className="bg-gray-300">
+    <Disclosure
+      as="nav"
+      className={clsx(background === "white" ? "bg-white" : "bg-gray-200")}
+    >
       {({ open }) => (
         <>
           <div className="mx-auto py-1 font-sans">
@@ -41,13 +48,13 @@ const NavBar = (props: NavBarProps) => {
                 </div>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:items-center">
-                <div className="hidden sm:ml-6 sm:flex sm:space-x-6 p-1 pr-4 text-black">
+                <div className="hidden sm:ml-6 sm:flex sm:flex-row sm:space-x-6 p-1 pr-4 text-black">
                   {paths.map((path) => (
                     <Link
                       href={path.path}
                       key={path.name}
                       className={clsx(
-                        "flex flex-row px-2 pt-1 text-sm font-medium pb-2",
+                        "flex flex-row px-2 pt-1 text-sm font-medium pb-2 mt-1.5",
                         path.active && "border-b-2 border-black"
                       )}
                     >
@@ -59,11 +66,30 @@ const NavBar = (props: NavBarProps) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={clsx(
-                      "flex flex-row px-2 pt-1 text-sm font-medium pb-2"
+                      "flex flex-row px-2 pt-1 text-sm font-medium pb-2 mt-1.5"
                     )}
                   >
                     Discord
                   </Link>
+                  {user ? (
+                    <button
+                      onClick={() => {
+                        supabaseClient.auth
+                          .signOut()
+                          .then(() => router.push("/home"));
+                      }}
+                      className="rounded-md bg-black px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                    >
+                      Sign Out
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => router.push("/login")}
+                      className="rounded-md bg-black px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                    >
+                      Sign In
+                    </button>
+                  )}
                 </div>
 
                 {/* Profile dropdown */}
