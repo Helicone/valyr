@@ -254,7 +254,8 @@ export default function Home() {
     </div>
   );
 }
-function LoggedInFlow({
+
+export function LoggedInFlow({
   setAuthHash,
   client,
   authPreview,

@@ -16,12 +16,17 @@ interface ResponseAndRequest {
 
 export function RequestTable({ client }: { client: SupabaseClient }) {
   const [data, setData] = useState<ResponseAndRequest[]>([]);
+
   useEffect(() => {
     const fetch = async () => {
       const { data, error } = await client
         .from("response_and_request")
         .select("*")
         .order("request_created_at", { ascending: false })
+        // .is(
+        //   "request_path",
+        //   "https://valyr-worker-prod.pzero.workers.dev/v1/completions"
+        // )
         .limit(1000);
       if (error) {
         console.log(error);
@@ -31,6 +36,7 @@ export function RequestTable({ client }: { client: SupabaseClient }) {
     };
     fetch();
   }, [client]);
+
   console.log(data[0]);
   const probabilities = data.map((d) => {
     const choice = d.response_body?.choices
