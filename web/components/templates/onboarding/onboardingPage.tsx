@@ -11,17 +11,17 @@ import CreateAccount from "./createAccount";
 import OneLineChange from "./oneLineChange";
 import ProgressBar from "./progressBar";
 
-interface OnboardingPageProps {}
+interface OnboardingPageProps {
+  step?: number;
+}
 
 const OnboardingPage = (props: OnboardingPageProps) => {
-  const {} = props;
+  const { step: currentStep } = props;
   const router = useRouter();
   const supabaseClient = useSupabaseClient();
   const user = useUser();
 
-  const [step, setStep] = useState<number>(1);
-  // const [email, setEmail] = useState<string>("");
-  // const [password, setPassword] = useState<string>("");
+  const [step, setStep] = useState<number>(currentStep || 1);
 
   const previousStep = () => {
     setStep(step - 1);
@@ -36,6 +36,9 @@ const OnboardingPage = (props: OnboardingPageProps) => {
     const { data: user, error: authError } = await supabaseClient.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/onboarding?step=3`,
+      },
     });
 
     // if there is an error, redirect to the onboarding page (maybe change this to an error message)
