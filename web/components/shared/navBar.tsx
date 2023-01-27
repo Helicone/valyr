@@ -9,7 +9,7 @@ import {
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { clsx } from "./clsx";
 
 interface NavBarProps {
@@ -22,6 +22,10 @@ const NavBar = (props: NavBarProps) => {
   const router = useRouter();
   const user = useUser();
   const { pathname } = router;
+
+  useEffect(() => {
+    // rerender the navbar when the user changes
+  }, [user]);
 
   const paths = [
     { name: "Home", path: "/home", active: pathname === "/home" },

@@ -23,7 +23,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
 
-  useEffect(() => {}, [user]);
+  console.log(origin);
 
   const [step, setStep] = useState<number>(currentStep || 1);
 

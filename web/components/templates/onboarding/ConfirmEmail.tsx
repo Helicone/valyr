@@ -4,6 +4,7 @@ import {
   QueueListIcon,
 } from "@heroicons/react/24/solid";
 import { useUser } from "@supabase/auth-helpers-react";
+import { useEffect } from "react";
 import { clsx } from "../../shared/clsx";
 
 interface ConfirmEmailProps {
@@ -17,6 +18,9 @@ const ConfirmEmail = (props: ConfirmEmailProps) => {
   const user = useUser();
 
   const isConfirmed = user?.confirmed_at !== undefined;
+
+  // rerender the component if the confirm status changes
+  useEffect(() => {}, [user?.confirmed_at]);
 
   return (
     <>
