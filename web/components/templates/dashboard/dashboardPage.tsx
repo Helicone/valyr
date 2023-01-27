@@ -20,8 +20,8 @@ const DashboardPage = (props: DashboardPageProps) => {
   const user = useUser();
 
   return (
-    <div className="px-4 sm:px-16 flex flex-col h-screen w-screen bg-gray-200">
-      <NavBar />
+    <div className="px-4 sm:px-16 flex flex-col h-screen w-screen bg-white">
+      <NavBar variant="secondary" />
       {user?.email === "valyrdemo@gmail.com" && (
         <div className="flex flex-row items-center justify-center bg-red-800 text-white p-2 mb-5">
           <ExclamationCircleIcon className="h-5 w-5 mr-2" />

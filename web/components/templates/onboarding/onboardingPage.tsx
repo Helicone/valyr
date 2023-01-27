@@ -1,14 +1,15 @@
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { Router, useRouter } from "next/router";
 import { useState } from "react";
 import { middleTruncString } from "../../../lib/stringHelpers";
 import { hashAuth } from "../../../lib/supabaseClient";
 import { supabaseServer } from "../../../lib/supabaseServer";
 import NavBar from "../../shared/navBar";
+import AddAPIKey from "./addAPIKey";
+import ConfirmEmail from "./ConfirmEmail";
+import CreateAccount from "./createAccount";
+import OneLineChange from "./oneLineChange";
 import ProgressBar from "./progressBar";
-import StepOne from "./stepOne";
-import StepThree from "./stepThree";
-import StepTwo from "./stepTwo";
 
 interface OnboardingPageProps {}
 
@@ -16,47 +17,55 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   const {} = props;
   const router = useRouter();
   const supabaseClient = useSupabaseClient();
+  const user = useUser();
 
   const [step, setStep] = useState<number>(1);
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  // const [email, setEmail] = useState<string>("");
+  // const [password, setPassword] = useState<string>("");
 
-  const stepOneNextHandler = (email: string, password: string) => {
-    setEmail(email);
-    setPassword(password);
-    setStep(2);
+  const previousStep = () => {
+    setStep(step - 1);
   };
 
-  const stepTwoNextHandler = () => {
-    setStep(3);
+  const nextStep = () => {
+    setStep(step + 1);
   };
 
-  const onCompleteOnboarding = async (apiKey: string) => {
-    setStep(4);
-
+  const stepOneNextHandler = async (email: string, password: string) => {
     // create an account
     const { data: user, error: authError } = await supabaseClient.auth.signUp({
       email,
       password,
     });
 
-    // if there is an error, redirect to the onboarding page
+    // if there is an error, redirect to the onboarding page (maybe change this to an error message)
     if (authError) {
       console.log("error", authError);
       router.push("/onboarding");
+    }
+
+    nextStep();
+  };
+
+  const onCompleteOnboarding = async (apiKey: string) => {
+    nextStep();
+
+    if (!user) {
+      router.push("/onboarding");
+      return;
     }
 
     // hash the api key and attach it to the created user
     const hashedApiKey = await hashAuth(apiKey);
     const { data, error } = await supabaseClient.from("user_api_keys").insert({
       api_key_preview: middleTruncString(apiKey, 8),
-      user_id: user.user?.id,
+      user_id: user.id,
       api_key_hash: hashedApiKey,
     });
 
     // if there is an error, tell the user that their api key was not saved
     if (error) {
-      console.log("error", authError);
+      console.log("error", error);
     }
 
     // redirect to the dashboard
@@ -66,27 +75,32 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   const renderStep = () => {
     switch (step) {
       case 1:
-        return <StepOne onNextHandler={stepOneNextHandler} />;
+        return <CreateAccount onNextHandler={stepOneNextHandler} />;
       case 2:
         return (
-          <StepTwo
-            onBackHandler={() => setStep(1)}
-            onNextHandler={stepTwoNextHandler}
-          />
+          <ConfirmEmail onBackHandler={previousStep} onNextHandler={nextStep} />
         );
       case 3:
         return (
-          <StepThree
-            onBackHandler={() => setStep(2)}
-            onNextHandler={onCompleteOnboarding}
+          <OneLineChange
+            onBackHandler={previousStep}
+            onNextHandler={nextStep}
           />
         );
       case 4:
         return (
+          <AddAPIKey
+            onBackHandler={previousStep}
+            onNextHandler={onCompleteOnboarding}
+          />
+        );
+      case 5:
+        // TODO: add a loading spinner
+        return (
           <p className="mt-4 text-2xl">Bringing you to your dashboard...</p>
         );
       default:
-        return <StepOne onNextHandler={stepOneNextHandler} />;
+        return <CreateAccount onNextHandler={stepOneNextHandler} />;
     }
   };
 

@@ -10,7 +10,7 @@ const Error = (props: ErrorProps) => {
   const router = useRouter();
 
   return (
-    <div className="px-4 sm:px-16 flex flex-col h-screen w-screen 2">
+    <div className="px-4 sm:px-16 flex flex-col h-screen w-screen bg-gray-200">
       <NavBar />
       <div className="h-4/5 justify-center align-middle items-center flex flex-col sm:flex-row gap-8">
         <div className="flex flex-col space-y-4">

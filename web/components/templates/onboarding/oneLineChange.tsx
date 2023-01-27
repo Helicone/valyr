@@ -1,11 +1,11 @@
 import { ArrowDownIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 
-interface StepTwoProps {
+interface OneLineChangeProps {
   onBackHandler: () => void;
   onNextHandler: () => void;
 }
 
-const StepTwo = (props: StepTwoProps) => {
+const OneLineChange = (props: OneLineChangeProps) => {
   const { onBackHandler, onNextHandler } = props;
 
   return (
@@ -49,4 +49,4 @@ const StepTwo = (props: StepTwoProps) => {
   );
 };
 
-export default StepTwo;
+export default OneLineChange;

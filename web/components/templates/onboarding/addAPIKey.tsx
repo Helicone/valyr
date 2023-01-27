@@ -1,12 +1,12 @@
 import { KeyIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 
-interface StepThreeProps {
+interface AddAPIKeyProps {
   onBackHandler: () => void;
   onNextHandler: (apiKey: string) => void;
 }
 
-const StepThree = (props: StepThreeProps) => {
+const AddAPIKey = (props: AddAPIKeyProps) => {
   const { onBackHandler, onNextHandler } = props;
   const [apiKey, setApiKey] = useState("");
 
@@ -67,4 +67,4 @@ const StepThree = (props: StepThreeProps) => {
   );
 };
 
-export default StepThree;
+export default AddAPIKey;

@@ -1,6 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import {
+  Bars3Icon,
+  BellIcon,
+  UserCircleIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/solid";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -8,11 +13,11 @@ import { Fragment } from "react";
 import { clsx } from "./clsx";
 
 interface NavBarProps {
-  background?: "white" | "gray";
+  variant?: "primary" | "secondary";
 }
 
 const NavBar = (props: NavBarProps) => {
-  const { background = "gray" } = props;
+  const { variant = "primary" } = props;
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
   const user = useUser();
@@ -25,13 +30,35 @@ const NavBar = (props: NavBarProps) => {
       path: "/dashboard",
       active: pathname === "/dashboard",
     },
-    { name: "About", path: "/about", active: pathname === "/about" },
+    // { name: "About", path: "/about", active: pathname === "/about" },
+  ];
+
+  const settingPaths = [
+    {
+      name: "View Account",
+      path: "/settings/account",
+      active: pathname === "/settings/account",
+    },
+    {
+      name: "Manage Keys",
+      path: "/settings/keys",
+      active: pathname === "/settings/keys",
+    },
+    {
+      name: "View Pricing",
+      path: "/settings/pricing",
+      active: pathname === "/settings/pricing",
+    },
   ];
 
   return (
     <Disclosure
       as="nav"
-      className={clsx(background === "white" ? "bg-white" : "bg-gray-200")}
+      className={clsx(
+        variant === "primary"
+          ? "bg-gray-200"
+          : "bg-white border-b-[0.5px] border-gray-300"
+      )}
     >
       {({ open }) => (
         <>
@@ -40,7 +67,7 @@ const NavBar = (props: NavBarProps) => {
               <div className="flex">
                 <div className="flex flex-shrink-0 items-center">
                   <button
-                    className="text-xl font-serif border border-black p-2 rounded-lg"
+                    className="text-lg font-serif border border-black p-2 rounded-lg"
                     onClick={() => router.push("/home")}
                   >
                     Valyr.ai
@@ -55,7 +82,7 @@ const NavBar = (props: NavBarProps) => {
                       key={path.name}
                       className={clsx(
                         "flex flex-row px-2 pt-1 text-sm font-medium pb-2 mt-1.5",
-                        path.active && "border-b-2 border-black"
+                        path.active && "border-b-2 border-sky-500"
                       )}
                     >
                       {path.name}
@@ -67,25 +94,15 @@ const NavBar = (props: NavBarProps) => {
                     rel="noopener noreferrer"
                     className={clsx(
                       "flex flex-row px-2 pt-1 text-sm font-medium pb-2 mt-1.5"
+                      // variant === "primary" ? "text-black" : "text-gray-500"
                     )}
                   >
                     Discord
                   </Link>
-                  {user ? (
-                    <button
-                      onClick={() => {
-                        supabaseClient.auth
-                          .signOut()
-                          .then(() => router.push("/home"));
-                      }}
-                      className="rounded-md bg-black px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                    >
-                      Sign Out
-                    </button>
-                  ) : (
+                  {!user && (
                     <button
                       onClick={() => router.push("/login")}
-                      className="rounded-md bg-black px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                      className="rounded-md bg-black px-3.5 py-1.5 text-sm font-semibold leading-7 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                     >
                       Sign In
                     </button>
@@ -93,69 +110,66 @@ const NavBar = (props: NavBarProps) => {
                 </div>
 
                 {/* Profile dropdown */}
-                {/* <Menu as="div" className="relative ml-3">
-                  <div>
-                    <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                      <span className="sr-only">Open user menu</span>
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
-                    </Menu.Button>
-                  </div>
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-200"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={clsx(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
+                {user && (
+                  <Menu as="div" className="relative ml-3">
+                    <div>
+                      <Menu.Button className="flex rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
+                        <UserCircleIcon className="h-8 w-8 text-black" />
+                      </Menu.Button>
+                    </div>
+                    <Transition
+                      as={Fragment}
+                      enter="transition ease-out duration-200"
+                      enterFrom="transform opacity-0 scale-95"
+                      enterTo="transform opacity-100 scale-100"
+                      leave="transition ease-in duration-75"
+                      leaveFrom="transform opacity-100 scale-100"
+                      leaveTo="transform opacity-0 scale-95"
+                    >
+                      <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <p
+                          className={clsx(
+                            "hover:none block px-4 py-2 text-sm text-gray-700 border-b border-gray-300 font-bold"
+                          )}
+                        >
+                          {user?.email}
+                        </p>
+                        {settingPaths.map((path) => (
+                          <Menu.Item key={path.name}>
+                            {({ active }) => (
+                              <Link
+                                href={path.path}
+                                className={clsx(
+                                  active ? "bg-gray-100" : "",
+                                  "block px-4 py-2 text-sm text-gray-700"
+                                )}
+                              >
+                                {path.name}
+                              </Link>
                             )}
-                          >
-                            Your Profile
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={clsx(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Settings
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={clsx(
-                              active ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
-                            )}
-                          >
-                            Sign out
-                          </a>
-                        )}
-                      </Menu.Item>
-                    </Menu.Items>
-                  </Transition>
-                </Menu> */}
+                          </Menu.Item>
+                        ))}
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              className={clsx(
+                                active ? "bg-gray-100" : "",
+                                "flex w-full px-4 py-2 text-sm text-gray-500"
+                              )}
+                              onClick={() => {
+                                supabaseClient.auth
+                                  .signOut()
+                                  .then(() => router.push("/home"));
+                              }}
+                            >
+                              Sign out
+                            </button>
+                          )}
+                        </Menu.Item>
+                      </Menu.Items>
+                    </Transition>
+                  </Menu>
+                )}
               </div>
               <div className="-mr-2 flex items-center sm:hidden">
                 {/* Mobile menu button */}
@@ -179,10 +193,10 @@ const NavBar = (props: NavBarProps) => {
                   as="a"
                   href={path.path}
                   className={clsx(
-                    "block border-l-4 py-2 pl-3 pr-4 text-base font-medium",
-                    path.active && "border-black bg-gray-400 text-black"
+                    "block py-2 pl-3 pr-4 text-base font-medium",
+                    path.active &&
+                      "border-l-4 border-sky-500 bg-sky-300 text-black"
                   )}
-                  // className="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700"
                 >
                   {path.name}
                 </Disclosure.Button>
@@ -191,62 +205,38 @@ const NavBar = (props: NavBarProps) => {
                 href="https://discord.gg/zsSTcH2qhG"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={clsx(
-                  "block border-l-4 py-2 pl-3 pr-4 text-base font-medium"
-                )}
+                className={clsx("block py-2 pl-3 pr-4 text-base font-medium")}
               >
                 Discord
               </Link>
+              <div className="border-b border-gray-300"></div>
+              {settingPaths.map((path) => (
+                <Disclosure.Button
+                  key={path.name}
+                  as="a"
+                  href={path.path}
+                  className={clsx(
+                    "block py-2 pl-3 pr-4 text-base font-medium",
+                    path.active &&
+                      "border-l-4 border-sky-500 bg-sky-300 text-black"
+                  )}
+                >
+                  {path.name}
+                </Disclosure.Button>
+              ))}
+              <Disclosure.Button
+                onClick={() => {
+                  supabaseClient.auth
+                    .signOut()
+                    .then(() => router.push("/home"));
+                }}
+                className={clsx(
+                  "block py-2 pl-3 pr-4 text-base font-medium text-gray-500"
+                )}
+              >
+                Sign Out
+              </Disclosure.Button>
             </div>
-            {/* <div className="border-t border-gray-200 pt-4 pb-3">
-              <div className="flex items-center px-4">
-                <div className="flex-shrink-0">
-                  <img
-                    className="h-10 w-10 rounded-full"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                  />
-                </div>
-                <div className="ml-3">
-                  <div className="text-base font-medium text-gray-800">
-                    Tom Cook
-                  </div>
-                  <div className="text-sm font-medium text-gray-500">
-                    tom@example.com
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  className="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
-              </div>
-              <div className="mt-3 space-y-1">
-                <Disclosure.Button
-                  as="a"
-                  href="#"
-                  className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                >
-                  Your Profile
-                </Disclosure.Button>
-                <Disclosure.Button
-                  as="a"
-                  href="#"
-                  className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                >
-                  Settings
-                </Disclosure.Button>
-                <Disclosure.Button
-                  as="a"
-                  href="#"
-                  className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
-                >
-                  Sign out
-                </Disclosure.Button>
-              </div>
-            </div> */}
           </Disclosure.Panel>
         </>
       )}

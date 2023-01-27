@@ -2,11 +2,11 @@ import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import ProgressBar from "./progressBar";
 
-interface StepOneProps {
+interface CreateAccountProps {
   onNextHandler: (email: string, password: string) => void;
 }
 
-const StepOne = (props: StepOneProps) => {
+const CreateAccount = (props: CreateAccountProps) => {
   const { onNextHandler } = props;
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -79,4 +79,4 @@ const StepOne = (props: StepOneProps) => {
   );
 };
 
-export default StepOne;
+export default CreateAccount;
