@@ -40,9 +40,9 @@ const DashboardPage = (props: DashboardPageProps) => {
           </p>
         </div>
       )}
-      <div className="h-2/6 w-full pt-8">
-        <div className="flex flex-col md:flex-row gap-8 ">
-          <div className="flex-1 border-[1px] border-black marker:rounded-lg px-5 py-3 flex flex-col items-center">
+      <div className="h-2/6 w-full pt-6">
+        <div className="flex flex-col md:flex-row gap-8">
+          <div className="flex-1 border-[1px] border-black rounded-lg px-5 py-3 flex flex-col items-center">
             <MetricsPanel />
           </div>
           <div className="flex-1 border-[1px] text-xs border-black rounded-lg px-5 py-3 max-h-60 overflow-y-auto">
@@ -63,7 +63,7 @@ const DashboardPage = (props: DashboardPageProps) => {
           </div>
         </div>
       </div>
-      <div className="h-3/6 w-full ">
+      <div className="h-3/6 w-full">
         <GraphAndCharts />
       </div>
     </div>
