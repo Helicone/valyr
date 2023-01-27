@@ -24,7 +24,7 @@ const Error = (props: ErrorProps) => {
           </p>
           <div className="pt-8 flex flex-row sm:items-center justify-center sm:justify-start gap-4">
             <button
-              onClick={() => router.push("/home")}
+              onClick={() => router.push("/")}
               className="rounded-md bg-black px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Home

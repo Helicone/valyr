@@ -28,7 +28,11 @@ const NavBar = (props: NavBarProps) => {
   }, [user]);
 
   const paths = [
-    { name: "Home", path: "/home", active: pathname === "/home" },
+    {
+      name: "Home",
+      path: "/",
+      active: pathname === "/",
+    },
     {
       name: "Dashboard",
       path: "/dashboard",
@@ -72,7 +76,7 @@ const NavBar = (props: NavBarProps) => {
                 <div className="flex flex-shrink-0 items-center">
                   <button
                     className="text-lg font-serif border border-black p-2 rounded-lg"
-                    onClick={() => router.push("/home")}
+                    onClick={() => router.push("/")}
                   >
                     Valyr.ai
                   </button>
@@ -93,12 +97,21 @@ const NavBar = (props: NavBarProps) => {
                     </Link>
                   ))}
                   <Link
+                    href="https://docs.valyrai.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={clsx(
+                      "flex flex-row px-2 pt-1 text-sm font-medium pb-2 mt-1.5"
+                    )}
+                  >
+                    Docs
+                  </Link>
+                  <Link
                     href="https://discord.gg/zsSTcH2qhG"
                     target="_blank"
                     rel="noopener noreferrer"
                     className={clsx(
                       "flex flex-row px-2 pt-1 text-sm font-medium pb-2 mt-1.5"
-                      // variant === "primary" ? "text-black" : "text-gray-500"
                     )}
                   >
                     Discord
@@ -130,7 +143,7 @@ const NavBar = (props: NavBarProps) => {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <Menu.Items className="absolute right-0 z-10 mt-2 w-fit origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <p
                           className={clsx(
                             "hover:none block px-4 py-2 text-sm text-gray-700 border-b border-gray-300 font-bold"
@@ -163,7 +176,7 @@ const NavBar = (props: NavBarProps) => {
                               onClick={() => {
                                 supabaseClient.auth
                                   .signOut()
-                                  .then(() => router.push("/home"));
+                                  .then(() => router.push("/"));
                               }}
                             >
                               Sign out
@@ -230,9 +243,7 @@ const NavBar = (props: NavBarProps) => {
               ))}
               <Disclosure.Button
                 onClick={() => {
-                  supabaseClient.auth
-                    .signOut()
-                    .then(() => router.push("/home"));
+                  supabaseClient.auth.signOut().then(() => router.push("/"));
                 }}
                 className={clsx(
                   "block py-2 pl-3 pr-4 text-base font-medium text-gray-500"
