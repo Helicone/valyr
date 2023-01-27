@@ -41,7 +41,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
       email,
       password,
       options: {
-        emailRedirectTo: `${origin}/onboarding?step=3`,
+        emailRedirectTo: `https://${origin}/onboarding?step=3`,
       },
     });
 
