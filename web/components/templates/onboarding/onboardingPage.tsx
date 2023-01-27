@@ -1,6 +1,6 @@
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { Router, useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { middleTruncString } from "../../../lib/stringHelpers";
 import { hashAuth } from "../../../lib/supabaseClient";
 import { supabaseServer } from "../../../lib/supabaseServer";
@@ -23,6 +23,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
 
+  useEffect(() => {}, [user]);
   console.log(origin);
 
   const [step, setStep] = useState<number>(currentStep || 1);
@@ -55,12 +56,11 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   };
 
   const onCompleteOnboarding = async (apiKey: string) => {
-    nextStep();
-
     if (!user) {
-      router.push("/onboarding");
       return;
     }
+
+    nextStep();
 
     // hash the api key and attach it to the created user
     const hashedApiKey = await hashAuth(apiKey);
@@ -73,6 +73,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
     // if there is an error, tell the user that their api key was not saved
     if (error) {
       console.log("error", error);
+      return;
     }
 
     // redirect to the dashboard
