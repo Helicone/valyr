@@ -10,16 +10,20 @@ import ConfirmEmail from "./ConfirmEmail";
 import CreateAccount from "./createAccount";
 import OneLineChange from "./oneLineChange";
 import ProgressBar from "./progressBar";
+import { NextRequest } from "next/server";
 
 interface OnboardingPageProps {
+  origin: string;
   step?: number;
 }
 
 const OnboardingPage = (props: OnboardingPageProps) => {
-  const { step: currentStep } = props;
+  const { origin, step: currentStep } = props;
   const router = useRouter();
   const supabaseClient = useSupabaseClient();
   const user = useUser();
+
+  console.log(origin);
 
   const [step, setStep] = useState<number>(currentStep || 1);
 
@@ -37,7 +41,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/onboarding?step=3`,
+        emailRedirectTo: `${origin}/onboarding?step=3`,
       },
     });
 

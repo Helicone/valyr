@@ -5,23 +5,25 @@ import NavBar from "../components/shared/navBar";
 import OnboardingPage from "../components/templates/onboarding/onboardingPage";
 
 interface OnboardingProps {
+  origin: string;
   step?: number;
 }
 
 const Onboarding = (props: OnboardingProps) => {
-  const { step } = props;
+  const { origin, step } = props;
 
-  return <OnboardingPage step={step} />;
+  return <OnboardingPage step={step} origin={origin} />;
 };
 
 export default Onboarding;
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { query } = context;
+  const { req, query } = context;
   const { step } = query;
 
   return {
     props: {
+      origin: req.headers.host,
       step: parseInt(step as string),
     },
   };
