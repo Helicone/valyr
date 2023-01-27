@@ -11,8 +11,6 @@ const HomePage = (props: HomePageProps) => {
   const user = useUser();
   const supabaseClient = useSupabaseClient<Database>();
 
-  console.log(user?.user_metadata);
-
   return (
     <div className="px-4 sm:px-16 flex flex-col h-screen w-screen bg-gray-200">
       <NavBar />

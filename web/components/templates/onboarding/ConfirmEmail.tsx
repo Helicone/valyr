@@ -16,8 +16,6 @@ const ConfirmEmail = (props: ConfirmEmailProps) => {
 
   const user = useUser();
 
-  console.log(user?.confirmed_at);
-
   const isConfirmed = user?.confirmed_at !== undefined;
 
   return (
