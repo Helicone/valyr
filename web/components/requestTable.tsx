@@ -3,8 +3,9 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { truncString } from "../lib/stringHelpers";
 import { Database } from "../supabase/database.types";
+import { CSVDownloadButton } from "./csvDownload";
 
-type ResponseAndRequest = Omit<
+export type ResponseAndRequest = Omit<
   Database["public"]["Views"]["response_and_request"]["Row"],
   "response_body" | "request_body"
 > & {
@@ -22,15 +23,27 @@ type ResponseAndRequest = Omit<
   } | null;
 };
 
-export function RequestTable({ client }: { client: SupabaseClient<Database> }) {
+export interface DataTable {
+  data: ResponseAndRequest[];
+  probabilities: (String | undefined)[]; 
+}
+
+export function GetTableData({ client, limit }: { client: SupabaseClient, limit?: number }): DataTable {
   const [data, setData] = useState<ResponseAndRequest[]>([]);
   useEffect(() => {
     const fetch = async () => {
-      const { data, error } = await client
+
+      var sql = client
         .from("response_and_request_rbac")
         .select("*")
-        .order("request_created_at", { ascending: false })
-        .limit(100);
+        .order("request_created_at", { ascending: false });
+
+      if (typeof limit !== "undefined") {
+        sql.limit(limit);
+      }
+
+      const { data, error } = await sql;
+
       if (error) {
         console.log(error);
       } else {
@@ -63,11 +76,27 @@ export function RequestTable({ client }: { client: SupabaseClient<Database> }) {
     return prob;
   });
 
+  const dataTable: DataTable = {
+    data: data,
+    probabilities: probabilities
+  }
+
+  return dataTable;
+}
+
+export function RequestTable({ client }: { client: SupabaseClient<Database> }) {
+  const tableData = GetTableData({ client, limit: 100 });
+  const data = tableData.data;
+  const probabilities = tableData.probabilities;
+
   return (
     <div className="h-full">
       <div>
         <span>Showing the most recent {} </span>
         <span className="font-thin text-xs">(max 100)</span>
+        <span className="text-right text-xs bottom-0" style={{float: "right"}}>
+          <CSVDownloadButton client={client} />
+        </span>
       </div>
       <div className="h-full overflow-y-auto mt-3">
         <table className="w-full mt-5 table-auto ">
