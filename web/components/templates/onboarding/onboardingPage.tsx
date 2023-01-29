@@ -37,6 +37,8 @@ const OnboardingPage = (props: OnboardingPageProps) => {
     setStep(step + 1);
   };
 
+  console.log(`https://${origin}/onboarding?step=3`);
+
   const stepOneNextHandler = async (email: string, password: string) => {
     // create an account
     const { data: user, error: authError } = await supabaseClient.auth.signUp({
