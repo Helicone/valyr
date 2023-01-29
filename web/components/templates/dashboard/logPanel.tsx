@@ -61,7 +61,7 @@ export function Logs() {
   }, [client]);
 
   return (
-    <div>
+    <div className="min-h-[100px]">
       {logs.reverse().map((log) => (
         <LogCard log={log} key={log.id} />
       ))}

@@ -56,7 +56,7 @@ const KeyPage = (props: KeyPageProps) => {
   const [apiKey, setApiKey] = useState("");
   return (
     <LeftNavLayout>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 mt-4 sm:mt-0">
         <div>
           <h1 className="text-2xl font-bold">API Keys</h1>
           <p className="text-sm text-black mt-1">
