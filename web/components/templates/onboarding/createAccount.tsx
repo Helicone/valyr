@@ -4,18 +4,19 @@ import ProgressBar from "./progressBar";
 
 interface CreateAccountProps {
   onNextHandler: (email: string, password: string) => void;
+  onBackHandler: () => void;
   authError?: string;
 }
 
 const CreateAccount = (props: CreateAccountProps) => {
-  const { onNextHandler, authError } = props;
+  const { onNextHandler, onBackHandler, authError } = props;
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   return (
     <>
       <p className="font-mono text-md pb-4 mb-4 border-b border-black">
-        Step 1: Get started with Valyr
+        Step 2: Get started with Valyr
       </p>
       <div className="flex flex-col border w-full sm:w-2/5 border-black rounded-lg p-8 items-center text-white bg-gray-400">
         <div className="w-full">
@@ -73,10 +74,16 @@ const CreateAccount = (props: CreateAccountProps) => {
         )}
       </div>
 
-      <div className="mt-8 flex flex-row w-full sm:w-2/5 justify-end">
+      <div className="mt-8 flex flex-row w-full sm:w-2/5 justify-between">
+        <button
+          onClick={onBackHandler}
+          className="rounded-md bg-gray-100 text-black px-3.5 py-1.5 text-base font-semibold leading-7 shadow-sm hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+        >
+          Back
+        </button>
         <button
           onClick={() => onNextHandler(email, password)}
-          className="mt-8 rounded-md bg-black px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          className="rounded-md bg-black px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
           Next
         </button>

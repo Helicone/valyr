@@ -11,7 +11,7 @@ const OneLineChange = (props: OneLineChangeProps) => {
   return (
     <>
       <p className="font-mono text-md pb-4 mb-4 border-b border-black">
-        Step 2: Replace your OpenAI URL with Valyr
+        Step 1: Replace your OpenAI URL with Valyr
       </p>
       <div className="flex flex-col border border-black rounded-lg p-8 items-center text-white text-lg sm:text-2xl bg-gray-400">
         <div className="flex flex-row bg-red-900">
@@ -31,13 +31,13 @@ const OneLineChange = (props: OneLineChangeProps) => {
           </code>
         </div>
       </div>
-      <div className="mt-8 flex flex-row w-full sm:w-2/5 justify-between">
-        <button
+      <div className="mt-8 flex flex-row w-full sm:w-2/5 justify-end">
+        {/* <button
           onClick={onBackHandler}
           className="rounded-md bg-gray-100 text-black px-3.5 py-1.5 text-base font-semibold leading-7 shadow-sm hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
           Back
-        </button>
+        </button> */}
         <button
           onClick={onNextHandler}
           className="rounded-md bg-black px-3.5 py-1.5 text-base font-semibold leading-7 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"

@@ -39,18 +39,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
     setStep(step + 1);
   };
 
-  const setAuthInfo = (email: string, password: string) => {
-    if (email === "" || password === "") {
-      setAuthError("Email and password are required.");
-      return;
-    }
-    setEmail(email);
-    setPassword(password);
-    nextStep();
-  };
-
-  const signUpHandler = async () => {
-    // create an account
+  const signUpHandler = async (email: string, password: string) => {
     const { data: user, error: authError } = await supabaseClient.auth.signUp({
       email,
       password,
@@ -59,10 +48,8 @@ const OnboardingPage = (props: OnboardingPageProps) => {
       },
     });
 
-    // if there is an error, redirect to the onboarding page (maybe change this to an error message)
     if (authError) {
       setAuthError(authError.message);
-      router.push("/onboarding");
       return;
     }
 
@@ -73,21 +60,31 @@ const OnboardingPage = (props: OnboardingPageProps) => {
     switch (step) {
       case 1:
         return (
-          <CreateAccount onNextHandler={setAuthInfo} authError={authError} />
+          <OneLineChange
+            onBackHandler={previousStep}
+            onNextHandler={nextStep}
+          />
         );
       case 2:
         return (
-          <OneLineChange
-            onBackHandler={previousStep}
+          <CreateAccount
             onNextHandler={signUpHandler}
+            onBackHandler={previousStep}
+            authError={authError}
           />
         );
+
       case 3:
         return (
           <ConfirmEmail onBackHandler={previousStep} onNextHandler={nextStep} />
         );
       default:
-        return <CreateAccount onNextHandler={setAuthInfo} />;
+        return (
+          <OneLineChange
+            onBackHandler={previousStep}
+            onNextHandler={nextStep}
+          />
+        );
     }
   };
 
