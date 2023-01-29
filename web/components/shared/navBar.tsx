@@ -189,55 +189,107 @@ const NavBar = (props: NavBarProps) => {
           </div>
 
           <Disclosure.Panel className="sm:hidden border border-black rounded-md py-2 px-1 absolute min-w-[92vw] z-40 bg-white">
-            <div className="space-y-1 pt-2 pb-3">
-              {paths.map((path) => (
-                <Disclosure.Button
-                  key={path.name}
-                  as="a"
-                  href={path.path}
-                  className={clsx(
-                    "block py-2 pl-3 pr-4 text-base font-medium",
-                    path.active &&
-                      "border-l-4 border-sky-500 bg-sky-300 text-black"
-                  )}
+            {variant === "primary" ? (
+              <div className="space-y-1 pb-3">
+                {paths.map((path) => (
+                  <Disclosure.Button
+                    key={path.name}
+                    as="a"
+                    href={path.path}
+                    className={clsx(
+                      "block py-2 pl-3 pr-4 text-base font-medium"
+                    )}
+                  >
+                    {path.name}
+                  </Disclosure.Button>
+                ))}
+                <div className="border-b border-gray-300"></div>
+                <Link
+                  href="https://docs.valyrai.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={clsx("block py-2 pl-3 pr-4 text-base font-medium")}
                 >
-                  {path.name}
-                </Disclosure.Button>
-              ))}
-              <Link
-                href="https://discord.gg/zsSTcH2qhG"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={clsx("block py-2 pl-3 pr-4 text-base font-medium")}
-              >
-                Discord
-              </Link>
-              <div className="border-b border-gray-300"></div>
-              {leftPaths.map((path) => (
-                <Disclosure.Button
-                  key={path.name}
-                  as="a"
-                  href={path.path}
-                  className={clsx(
-                    "block py-2 pl-3 pr-4 text-base font-medium",
-                    path.active &&
-                      "border-l-4 border-sky-500 bg-sky-300 text-black"
-                  )}
+                  Docs
+                </Link>
+                <Link
+                  href="https://discord.gg/zsSTcH2qhG"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={clsx("block py-2 pl-3 pr-4 text-base font-medium")}
                 >
-                  {path.name}
-                </Disclosure.Button>
-              ))}
-              <Disclosure.Button
-                onClick={() => {
-                  supabaseClient.auth.signOut().then(() => router.push("/"));
-                }}
-                className={clsx(
-                  "block py-2 pl-3 pr-4 text-base font-medium text-gray-500"
+                  Discord
+                </Link>
+                {user ? (
+                  <Disclosure.Button
+                    onClick={() => {
+                      supabaseClient.auth
+                        .signOut()
+                        .then(() => router.push("/"));
+                    }}
+                    className={clsx(
+                      "block py-2 pl-3 pr-4 text-base font-medium text-gray-500"
+                    )}
+                  >
+                    Sign Out
+                  </Disclosure.Button>
+                ) : (
+                  <Disclosure.Button
+                    onClick={() => {
+                      router.push("/login");
+                    }}
+                    className={clsx(
+                      "block py-2 pl-3 pr-4 text-base font-medium text-gray-500"
+                    )}
+                  >
+                    Sign In
+                  </Disclosure.Button>
                 )}
-              >
-                Sign Out
-              </Disclosure.Button>
-            </div>
+              </div>
+            ) : (
+              <div className="space-y-1 pb-3">
+                {leftPaths.map((path) => (
+                  <Disclosure.Button
+                    key={path.name}
+                    as="a"
+                    href={path.path}
+                    className={clsx(
+                      "block py-2 pl-3 pr-4 text-base font-medium"
+                    )}
+                  >
+                    {path.name}
+                  </Disclosure.Button>
+                ))}
+                <div className="border-b border-gray-300"></div>
+                <Link
+                  href="https://docs.valyrai.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={clsx("block py-2 pl-3 pr-4 text-base font-medium")}
+                >
+                  Docs
+                </Link>
+                <Link
+                  href="https://discord.gg/zsSTcH2qhG"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={clsx("block py-2 pl-3 pr-4 text-base font-medium")}
+                >
+                  Discord
+                </Link>
+
+                <Disclosure.Button
+                  onClick={() => {
+                    supabaseClient.auth.signOut().then(() => router.push("/"));
+                  }}
+                  className={clsx(
+                    "block py-2 pl-3 pr-4 text-base font-medium text-gray-500"
+                  )}
+                >
+                  Sign Out
+                </Disclosure.Button>
+              </div>
+            )}
           </Disclosure.Panel>
         </>
       )}

@@ -1,6 +1,6 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MetricsDB } from "../../../schema/metrics";
 import { Database } from "../../../supabase/database.types";
 
@@ -118,12 +118,12 @@ export function MetricsPanel() {
   return (
     <div className="grid grid-cols-5 gap-2">
       {metrics.map((m) => (
-        <div key={m.label}>
+        <React.Fragment key={m.label}>
           <div className="col-span-3">{m.label}</div>
           <div className="text-black font-bold text-right col-span-2">
             {m.value}
           </div>
-        </div>
+        </React.Fragment>
       ))}
     </div>
   );
