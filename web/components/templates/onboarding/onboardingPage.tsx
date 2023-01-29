@@ -27,6 +27,8 @@ const OnboardingPage = (props: OnboardingPageProps) => {
 
   const [step, setStep] = useState<number>(currentStep || 1);
   const [authError, setAuthError] = useState<string>();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [keyError, setKeyError] = useState<string>(); // add api key error callback
 
   const previousStep = () => {
@@ -37,15 +39,23 @@ const OnboardingPage = (props: OnboardingPageProps) => {
     setStep(step + 1);
   };
 
-  console.log(`https://${origin}/onboarding?step=3`);
+  const setAuthInfo = (email: string, password: string) => {
+    if (email === "" || password === "") {
+      setAuthError("Email and password are required.");
+      return;
+    }
+    setEmail(email);
+    setPassword(password);
+    nextStep();
+  };
 
-  const stepOneNextHandler = async (email: string, password: string) => {
+  const signUpHandler = async () => {
     // create an account
     const { data: user, error: authError } = await supabaseClient.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: `https://${origin}/onboarding?step=3`,
+        emailRedirectTo: `https://${origin}/manage/keys`,
       },
     });
 
@@ -59,70 +69,25 @@ const OnboardingPage = (props: OnboardingPageProps) => {
     nextStep();
   };
 
-  const onCompleteOnboarding = async (apiKey: string) => {
-    if (!user) {
-      setKeyError("You must be logged in to add an API key.");
-      previousStep();
-      return;
-    }
-
-    nextStep();
-
-    // hash the api key and attach it to the created user
-    const hashedApiKey = await hashAuth(apiKey);
-    const { data, error } = await supabaseClient.from("user_api_keys").insert({
-      api_key_preview: middleTruncString(apiKey, 8),
-      user_id: user.id,
-      api_key_hash: hashedApiKey,
-    });
-
-    // if there is an error, tell the user that their api key was not saved
-    if (error) {
-      setKeyError(error.message);
-      return;
-    }
-
-    // redirect to the dashboard
-    router.push("/dashboard");
-  };
-
   const renderStep = () => {
     switch (step) {
       case 1:
         return (
-          <CreateAccount
-            onNextHandler={stepOneNextHandler}
-            authError={authError}
-          />
+          <CreateAccount onNextHandler={setAuthInfo} authError={authError} />
         );
       case 2:
         return (
-          <ConfirmEmail onBackHandler={previousStep} onNextHandler={nextStep} />
+          <OneLineChange
+            onBackHandler={previousStep}
+            onNextHandler={signUpHandler}
+          />
         );
       case 3:
         return (
-          <OneLineChange
-            onBackHandler={previousStep}
-            onNextHandler={nextStep}
-          />
-        );
-      case 4:
-        return (
-          <AddAPIKey
-            onBackHandler={previousStep}
-            onNextHandler={onCompleteOnboarding}
-            keyError={keyError}
-          />
-        );
-      case 5:
-        return (
-          <div className="mt-4 text-2xl flex flex-col items-center space-y-12">
-            <ArrowPathIcon className="w-16 h-16 animate-spin" />
-            <p>Bringing you to your dashboard...</p>
-          </div>
+          <ConfirmEmail onBackHandler={previousStep} onNextHandler={nextStep} />
         );
       default:
-        return <CreateAccount onNextHandler={stepOneNextHandler} />;
+        return <CreateAccount onNextHandler={setAuthInfo} />;
     }
   };
 

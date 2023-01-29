@@ -36,15 +36,6 @@ const ProgressBar = (props: ProgressBarProps) => {
           ? "complete"
           : "incomplete",
     },
-    {
-      name: "Step 4",
-      status:
-        currentStep === 4
-          ? "current"
-          : currentStep > 4
-          ? "complete"
-          : "incomplete",
-    },
   ];
 
   return (

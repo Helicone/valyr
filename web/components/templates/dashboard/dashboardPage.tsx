@@ -47,7 +47,7 @@ const DashboardPage = (props: DashboardPageProps) => {
             <div className="flex-1 border border-black rounded-lg p-2 flex flex-col items-center">
               <MetricsPanel />
             </div>
-            <div className="flex-1 border text-xs border-black rounded-lg p-2 max-h-60 overflow-y-auto">
+            <div className="flex-1 border text-xs border-black rounded-lg p-2 h-60 max-h-60 overflow-y-auto">
               {/* This is a vertically scrollable table */}
               <div className="flex flex-row justify-between">
                 <div className="flex flex-row gap-2">

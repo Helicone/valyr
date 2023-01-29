@@ -1,16 +1,11 @@
 import { Dialog, Transition } from "@headlessui/react";
-import {
-  Bars3Icon,
-  CalendarIcon,
-  ChartBarIcon,
-  FolderIcon,
-  HomeIcon,
-  InboxIcon,
-  UsersIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/solid";
+import { BellAlertIcon, HomeIcon, KeyIcon } from "@heroicons/react/24/outline";
+import { ExclamationCircleIcon } from "@heroicons/react/24/solid";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import { Fragment, ReactNode, useState } from "react";
+import { useKeys } from "../../lib/useKeys";
+import { Database } from "../../supabase/database.types";
 import { clsx } from "./clsx";
 
 interface LeftNavLayoutProps {
@@ -20,32 +15,26 @@ interface LeftNavLayoutProps {
 const LeftNavLayout = (props: LeftNavLayoutProps) => {
   const { children } = props;
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
+  const supabaseClient = useSupabaseClient<Database>();
   const router = useRouter();
+
+  const apiKeys = useKeys(supabaseClient);
 
   const { pathname } = router;
 
   const leftPaths = [
-    // {
-    //   name: "View Account",
-    //   path: "/settings/account",
-    //   active: pathname === "/settings/account",
-    // },
     {
       name: "Dashboard",
       path: "/dashboard",
       active: pathname === "/dashboard",
+      icon: HomeIcon,
     },
     {
       name: "Manage Keys",
       path: "/settings/keys",
       active: pathname === "/settings/keys",
+      icon: KeyIcon,
     },
-    // {
-    //   name: "View Pricing",
-    //   path: "/settings/pricing",
-    //   active: pathname === "/settings/pricing",
-    // },
   ];
 
   return (
@@ -61,19 +50,32 @@ const LeftNavLayout = (props: LeftNavLayoutProps) => {
                 item.active
                   ? "bg-gray-200 text-gray-900"
                   : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-                "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                "group flex items-center px-2 py-2 text-sm font-medium rounded-md justify-between"
               )}
             >
-              {/* <item.icon
-                className={clsx(
-                  item.current
-                    ? "text-gray-500"
-                    : "text-gray-400 group-hover:text-gray-500",
-                  "mr-3 flex-shrink-0 h-6 w-6"
-                )}
-                aria-hidden="true"
-              /> */}
-              {item.name}
+              <div className="flex flex-row">
+                <item.icon
+                  className={clsx(
+                    item.active
+                      ? "bg-gray-200 text-gray-700"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                    "mr-2.5 flex-shrink-0 h-5 w-5"
+                  )}
+                  aria-hidden="true"
+                />
+                {item.name}
+              </div>
+              {item.path === "/settings/keys" && apiKeys.length < 1 && (
+                <ExclamationCircleIcon
+                  className={clsx(
+                    item.active
+                      ? "bg-gray-200 text-red-600"
+                      : "text-red-600 hover:bg-gray-50 hover:text-gray-900",
+                    "flex-shrink-0 h-5 w-5 self-end"
+                  )}
+                  aria-hidden="true"
+                />
+              )}
             </a>
           ))}
         </nav>

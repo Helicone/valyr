@@ -63,6 +63,11 @@ const KeyPage = (props: KeyPageProps) => {
             Here you can manage what API keys you have saved. You can add as
             many as you like.
           </p>
+          {apiKeys.length < 1 && (
+            <p className="text-sm text-red-600 mt-1">
+              Please add an API key to get started
+            </p>
+          )}
         </div>
         <div className="pt-4 block w-full max-w-lg">
           <div className="flex flex-col">

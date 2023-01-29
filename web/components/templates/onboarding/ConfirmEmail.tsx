@@ -4,6 +4,7 @@ import {
   QueueListIcon,
 } from "@heroicons/react/24/solid";
 import { useUser } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { clsx } from "../../shared/clsx";
 
@@ -16,22 +17,27 @@ const ConfirmEmail = (props: ConfirmEmailProps) => {
   const { onBackHandler, onNextHandler } = props;
 
   const user = useUser();
+  const router = useRouter();
 
   const isConfirmed = user?.confirmed_at !== undefined;
 
   // rerender the component if the confirm status changes
-  useEffect(() => {}, [user?.confirmed_at]);
+  useEffect(() => {
+    if (user && user.confirmed_at) {
+      router.push("/dashboard");
+    }
+  }, [user?.confirmed_at, router, user]);
 
   return (
     <>
       <p className="font-mono text-md pb-4 mb-4 border-b border-black">
-        Step 2: Confirm your email
+        Step 3: Confirm your email
       </p>
       {isConfirmed ? (
         <div className="flex flex-col border border-black rounded-lg p-8 items-center text-black text-lg sm:text-lg bg-gray-400">
           <CheckCircleIcon className="w-12 h-12 mb-4" />
           <p>Thank you for confirming your email</p>{" "}
-          <p>Please continue throw our onboarding process</p>
+          <p>Please continue through our onboarding process</p>
         </div>
       ) : (
         <div className="flex flex-col border border-black rounded-lg p-8 items-center text-black text-lg sm:text-lg bg-gray-400">
@@ -40,7 +46,7 @@ const ConfirmEmail = (props: ConfirmEmailProps) => {
           <p>If you don&apos;t see it, check your spam folder.</p>
         </div>
       )}
-
+      {/* 
       <div className="mt-8 flex flex-row w-full sm:w-2/5 justify-between">
         <button
           onClick={onBackHandler}
@@ -59,7 +65,7 @@ const ConfirmEmail = (props: ConfirmEmailProps) => {
         >
           Next
         </button>
-      </div>
+      </div> */}
     </>
   );
 };
