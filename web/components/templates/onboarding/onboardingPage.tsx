@@ -11,6 +11,8 @@ import CreateAccount from "./createAccount";
 import OneLineChange from "./oneLineChange";
 import ProgressBar from "./progressBar";
 import { NextRequest } from "next/server";
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
+import BasePage from "../../shared/basePage";
 
 interface OnboardingPageProps {
   origin: string;
@@ -23,9 +25,9 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
 
-  console.log(origin);
-
   const [step, setStep] = useState<number>(currentStep || 1);
+  const [authError, setAuthError] = useState<string>();
+  const [keyError, setKeyError] = useState<string>(); // add api key error callback
 
   const previousStep = () => {
     setStep(step - 1);
@@ -47,8 +49,9 @@ const OnboardingPage = (props: OnboardingPageProps) => {
 
     // if there is an error, redirect to the onboarding page (maybe change this to an error message)
     if (authError) {
-      console.log("error", authError);
+      setAuthError(authError.message);
       router.push("/onboarding");
+      return;
     }
 
     nextStep();
@@ -56,6 +59,8 @@ const OnboardingPage = (props: OnboardingPageProps) => {
 
   const onCompleteOnboarding = async (apiKey: string) => {
     if (!user) {
+      setKeyError("You must be logged in to add an API key.");
+      previousStep();
       return;
     }
 
@@ -71,7 +76,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
 
     // if there is an error, tell the user that their api key was not saved
     if (error) {
-      console.log("error", error);
+      setKeyError(error.message);
       return;
     }
 
@@ -82,7 +87,12 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   const renderStep = () => {
     switch (step) {
       case 1:
-        return <CreateAccount onNextHandler={stepOneNextHandler} />;
+        return (
+          <CreateAccount
+            onNextHandler={stepOneNextHandler}
+            authError={authError}
+          />
+        );
       case 2:
         return (
           <ConfirmEmail onBackHandler={previousStep} onNextHandler={nextStep} />
@@ -99,12 +109,15 @@ const OnboardingPage = (props: OnboardingPageProps) => {
           <AddAPIKey
             onBackHandler={previousStep}
             onNextHandler={onCompleteOnboarding}
+            keyError={keyError}
           />
         );
       case 5:
-        // TODO: add a loading spinner
         return (
-          <p className="mt-4 text-2xl">Bringing you to your dashboard...</p>
+          <div className="mt-4 text-2xl flex flex-col items-center space-y-12">
+            <ArrowPathIcon className="w-16 h-16 animate-spin" />
+            <p>Bringing you to your dashboard...</p>
+          </div>
         );
       default:
         return <CreateAccount onNextHandler={stepOneNextHandler} />;
@@ -112,13 +125,12 @@ const OnboardingPage = (props: OnboardingPageProps) => {
   };
 
   return (
-    <div className="px-4 sm:px-16 flex flex-col h-screen w-screen bg-gray-200">
-      <NavBar />
+    <BasePage>
       <div className="h-full justify-center align-middle items-center flex flex-col space-y-6 sm:space-y-12">
         <ProgressBar currentStep={step} />
         {renderStep()}
       </div>
-    </div>
+    </BasePage>
   );
 };
 

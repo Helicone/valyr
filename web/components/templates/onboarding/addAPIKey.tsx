@@ -4,10 +4,11 @@ import { useState } from "react";
 interface AddAPIKeyProps {
   onBackHandler: () => void;
   onNextHandler: (apiKey: string) => void;
+  keyError?: string;
 }
 
 const AddAPIKey = (props: AddAPIKeyProps) => {
-  const { onBackHandler, onNextHandler } = props;
+  const { onBackHandler, onNextHandler, keyError } = props;
   const [apiKey, setApiKey] = useState("");
 
   return (
@@ -37,6 +38,11 @@ const AddAPIKey = (props: AddAPIKeyProps) => {
               placeholder="your OpenAI API key"
             />
           </div>
+          {keyError && (
+            <p className="mt-2 text-sm text-red-600" id="email-error">
+              {keyError}
+            </p>
+          )}
         </div>
       </div>
       <p className="font-mono text-sm mt-8 w-full sm:w-2/5">

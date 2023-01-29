@@ -10,7 +10,7 @@ const TimeGraphWHeader = (props: TimeGraphWHeaderProps) => {
 
   return (
     <div className="h-full w-full">
-      <div className="w-full h-1/6 pl-10">
+      <div className="w-full h-1/6">
         <p className="text-lg text-black">Number of requests over time</p>
       </div>
       <div className="w-full h-72">

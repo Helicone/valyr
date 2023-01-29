@@ -30,7 +30,7 @@ const GraphAndCharts = () => {
 
   return (
     <>
-      <div className="h-[10%] w-full md:pl-10 flex flex-col gap-3">
+      <div className="h-[10%] w-full flex flex-col gap-3">
         <div className="flex flex-row gap-5 items-center overflow-auto">
           <div className="border-2 dark:border-none rounded-full grid grid-cols-2 sm:grid-cols-3 gap-2">
             {differentViews.map((view) => (

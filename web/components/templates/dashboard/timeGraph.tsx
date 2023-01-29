@@ -33,7 +33,7 @@ const RenderLineChart = ({
     count: d.count,
   }));
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="95%" height="100%">
       <LineChart data={chartData}>
         <Line type="monotone" dataKey="count" stroke="#8884d8" />
         <CartesianGrid stroke="#ccc" />

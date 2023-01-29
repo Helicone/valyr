@@ -47,7 +47,7 @@ const AuthenticationForm = (props: AuthenticationFormProps) => {
 
   return (
     <>
-      <div className="flex h-screen flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-200 text-black">
+      <div className="flex h-screen flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-300 text-black">
         <div className="sm:mx-auto sm:w-full sm:max-w-md text-center space-y-4">
           <p className="text-5xl sm:text-6xl font-serif">Valyr.ai</p>
           <p className="text-3xl sm:text-4xl font-sans font-light">
@@ -159,7 +159,7 @@ const AuthenticationForm = (props: AuthenticationFormProps) => {
                     isFormValid()
                       ? "bg-black hover:bg-gray-800"
                       : "bg-gray-800 hover:bg-gray-600 hover:cursor-not-allowed"
-                  } flex w-full justify-center rounded-md border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2`}
+                  } flex w-full justify-center rounded-md border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2`}
                 >
                   {(() => {
                     if (formType === "login") {

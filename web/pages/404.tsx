@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
+import BasePage from "../components/shared/basePage";
 import NavBar from "../components/shared/navBar";
 
 interface ErrorProps {}
@@ -10,8 +11,7 @@ const Error = (props: ErrorProps) => {
   const router = useRouter();
 
   return (
-    <div className="px-4 sm:px-16 flex flex-col h-screen w-screen bg-gray-200">
-      <NavBar />
+    <BasePage>
       <div className="h-4/5 justify-center align-middle items-center flex flex-col sm:flex-row gap-8">
         <div className="flex flex-col space-y-4">
           <p className="text-5xl sm:text-6xl font-serif">Oops!</p>
@@ -49,7 +49,7 @@ const Error = (props: ErrorProps) => {
           />
         </div>
       </div>
-    </div>
+    </BasePage>
   );
 };
 

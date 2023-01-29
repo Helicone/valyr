@@ -1,6 +1,7 @@
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import { Database } from "../../../supabase/database.types";
+import BasePage from "../../shared/basePage";
 import NavBar from "../../shared/navBar";
 
 interface HomePageProps {}
@@ -12,10 +13,9 @@ const HomePage = (props: HomePageProps) => {
   const supabaseClient = useSupabaseClient<Database>();
 
   return (
-    <div className="px-4 sm:px-16 flex flex-col h-screen w-screen bg-gray-200">
-      <NavBar />
+    <BasePage>
       <div className="h-4/5 justify-center align-middle items-left flex flex-col space-y-4">
-        <p className="text-5xl sm:text-6xl font-serif">Valyr.ai</p>
+        <p className="text-5xl sm:text-6xl font-sans">ContextOwl</p>
         <p className="text-3xl sm:text-4xl font-sans font-light">
           Simplify GPT-3 observability with{" "}
           <span className="bg-sky-300 py-0.5 px-1.5 rounded-sm font-bold">
@@ -64,7 +64,7 @@ const HomePage = (props: HomePageProps) => {
           )}
         </div>
       </div>
-    </div>
+    </BasePage>
   );
 };
 

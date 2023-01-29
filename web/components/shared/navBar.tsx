@@ -38,25 +38,24 @@ const NavBar = (props: NavBarProps) => {
       path: "/dashboard",
       active: pathname === "/dashboard",
     },
-    // { name: "About", path: "/about", active: pathname === "/about" },
   ];
 
-  const settingPaths = [
-    {
-      name: "View Account",
-      path: "/settings/account",
-      active: pathname === "/settings/account",
-    },
+  const leftPaths = [
+    // {
+    //   name: "View Account",
+    //   path: "/settings/account",
+    //   active: pathname === "/settings/account",
+    // },
     {
       name: "Manage Keys",
       path: "/settings/keys",
       active: pathname === "/settings/keys",
     },
-    {
-      name: "View Pricing",
-      path: "/settings/pricing",
-      active: pathname === "/settings/pricing",
-    },
+    // {
+    //   name: "View Pricing",
+    //   path: "/settings/pricing",
+    //   active: pathname === "/settings/pricing",
+    // },
   ];
 
   return (
@@ -64,8 +63,8 @@ const NavBar = (props: NavBarProps) => {
       as="nav"
       className={clsx(
         variant === "primary"
-          ? "bg-gray-200"
-          : "bg-white border-b-[0.5px] border-gray-300"
+          ? "bg-gray-300"
+          : "bg-white border-b-[0.5px] border-gray-300 sm:px-4"
       )}
     >
       {({ open }) => (
@@ -74,28 +73,25 @@ const NavBar = (props: NavBarProps) => {
             <div className="flex h-16 justify-between">
               <div className="flex">
                 <div className="flex flex-shrink-0 items-center">
-                  <button
-                    className="text-lg font-serif border border-black p-2 rounded-lg"
-                    onClick={() => router.push("/")}
-                  >
-                    Valyr.ai
-                  </button>
+                  <div className="text-lg border border-black p-2 rounded-lg">
+                    ContextOwl
+                  </div>
                 </div>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:items-center">
                 <div className="hidden sm:ml-6 sm:flex sm:flex-row sm:space-x-6 p-1 pr-4 text-black">
-                  {paths.map((path) => (
+                  {!user && (
                     <Link
-                      href={path.path}
-                      key={path.name}
+                      href="/"
+                      key="home"
                       className={clsx(
                         "flex flex-row px-2 pt-1 text-sm font-medium pb-2 mt-1.5",
-                        path.active && "border-b-2 border-sky-500"
+                        pathname === "/" && "border-b-2 border-sky-500"
                       )}
                     >
-                      {path.name}
+                      Home
                     </Link>
-                  ))}
+                  )}
                   <Link
                     href="https://docs.valyrai.com/"
                     target="_blank"
@@ -151,7 +147,7 @@ const NavBar = (props: NavBarProps) => {
                         >
                           {user?.email}
                         </p>
-                        {settingPaths.map((path) => (
+                        {leftPaths.map((path) => (
                           <Menu.Item key={path.name}>
                             {({ active }) => (
                               <Link
@@ -227,7 +223,7 @@ const NavBar = (props: NavBarProps) => {
                 Discord
               </Link>
               <div className="border-b border-gray-300"></div>
-              {settingPaths.map((path) => (
+              {leftPaths.map((path) => (
                 <Disclosure.Button
                   key={path.name}
                   as="a"

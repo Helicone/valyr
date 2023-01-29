@@ -4,10 +4,11 @@ import ProgressBar from "./progressBar";
 
 interface CreateAccountProps {
   onNextHandler: (email: string, password: string) => void;
+  authError?: string;
 }
 
 const CreateAccount = (props: CreateAccountProps) => {
-  const { onNextHandler } = props;
+  const { onNextHandler, authError } = props;
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -65,6 +66,11 @@ const CreateAccount = (props: CreateAccountProps) => {
             />
           </div>
         </div>
+        {authError && (
+          <div className="mt-4 text-sm text-red-600 w-full">
+            <p>{authError}</p>
+          </div>
+        )}
       </div>
 
       <div className="mt-8 flex flex-row w-full sm:w-2/5 justify-end">
