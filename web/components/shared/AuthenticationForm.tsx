@@ -58,7 +58,7 @@ const AuthenticationForm = (props: AuthenticationFormProps) => {
           <p className="mt-2 text-center text-lg font-light text-gray-600">
             Or{" "}
             <a
-              href={formType === "login" ? "/register" : "/login"}
+              href={formType === "login" ? "/onboarding" : "/login"}
               className="font-medium text-black underline"
             >
               {formType === "login"

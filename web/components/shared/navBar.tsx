@@ -33,29 +33,19 @@ const NavBar = (props: NavBarProps) => {
       path: "/",
       active: pathname === "/",
     },
+  ];
+
+  const leftPaths = [
     {
       name: "Dashboard",
       path: "/dashboard",
       active: pathname === "/dashboard",
     },
-  ];
-
-  const leftPaths = [
-    // {
-    //   name: "View Account",
-    //   path: "/settings/account",
-    //   active: pathname === "/settings/account",
-    // },
     {
       name: "Manage Keys",
       path: "/settings/keys",
       active: pathname === "/settings/keys",
     },
-    // {
-    //   name: "View Pricing",
-    //   path: "/settings/pricing",
-    //   active: pathname === "/settings/pricing",
-    // },
   ];
 
   return (
@@ -63,13 +53,13 @@ const NavBar = (props: NavBarProps) => {
       as="nav"
       className={clsx(
         variant === "primary"
-          ? "bg-gray-300"
-          : "bg-white border-b-[0.5px] border-gray-300 sm:px-4"
+          ? "bg-gray-300 py-1"
+          : "bg-white border-b-[0.5px] border-gray-300 sm:px-4 py-0"
       )}
     >
       {({ open }) => (
         <>
-          <div className="mx-auto py-1 font-sans">
+          <div className="mx-auto font-sans">
             <div className="flex h-16 justify-between">
               <div className="flex">
                 <div className="flex flex-shrink-0 items-center">
