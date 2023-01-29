@@ -12,7 +12,7 @@ const Error = (props: ErrorProps) => {
 
   return (
     <BasePage>
-      <div className="h-4/5 justify-center align-middle items-center flex flex-col sm:flex-row gap-8">
+      <div className="h-full sm:h-4/5 justify-center align-middle items-center flex flex-col sm:flex-row gap-8">
         <div className="flex flex-col space-y-4">
           <p className="text-5xl sm:text-6xl font-serif">Oops!</p>
           <p className="text-3xl sm:text-4xl font-sans font-light">
@@ -32,14 +32,23 @@ const Error = (props: ErrorProps) => {
             <a
               href="https://discord.gg/zsSTcH2qhG"
               target="_blank"
-              className="text-base font-semibold leading-7 text-black hover:text-gray-800"
+              className="mt-1.5 sm:mt-0 text-base font-semibold leading-7 text-black hover:text-gray-800"
               rel="noreferrer"
             >
               Join Discord <span aria-hidden="true">→</span>
             </a>
           </div>
         </div>
-        <div className="w-full flex">
+        <div className="w-full flex sm:hidden">
+          <Image
+            src={"/assets/404page.jpeg"}
+            alt={"404ErrorMeme"}
+            width={250}
+            height={250}
+            className="mx-auto"
+          />
+        </div>
+        <div className="w-full hidden sm:flex">
           <Image
             src={"/assets/404page.jpeg"}
             alt={"404ErrorMeme"}
