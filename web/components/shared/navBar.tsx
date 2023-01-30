@@ -42,9 +42,9 @@ const NavBar = (props: NavBarProps) => {
       active: pathname === "/dashboard",
     },
     {
-      name: "Manage Keys",
-      path: "/settings/keys",
-      active: pathname === "/settings/keys",
+      name: "Keys",
+      path: "/keys",
+      active: pathname === "/keys",
     },
   ];
 
@@ -64,7 +64,7 @@ const NavBar = (props: NavBarProps) => {
               <div className="flex">
                 <div className="flex flex-shrink-0 items-center">
                   <div className="text-lg border border-black p-2 rounded-lg font-serif">
-                    TableTalk
+                    Helicone
                   </div>
                 </div>
               </div>
@@ -129,7 +129,7 @@ const NavBar = (props: NavBarProps) => {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="absolute right-0 z-10 mt-2 w-fit origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <Menu.Items className="absolute right-0 z-10 mt-2 w-fit origin-top-right rounded-md bg-white py-1 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <p
                           className={clsx(
                             "hover:none block px-4 py-2 text-sm text-gray-700 border-b border-gray-300 font-bold"

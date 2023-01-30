@@ -44,7 +44,7 @@ const OnboardingPage = (props: OnboardingPageProps) => {
       email,
       password,
       options: {
-        emailRedirectTo: `https://${origin}/manage/keys`,
+        emailRedirectTo: `https://${origin}/keys`,
       },
     });
 

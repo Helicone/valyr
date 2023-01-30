@@ -1,9 +1,9 @@
 import { InformationCircleIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
-import { middleTruncString } from "../../lib/stringHelpers";
-import { hashAuth } from "../../lib/supabaseClient";
-import { Database } from "../../supabase/database.types";
+import { middleTruncString } from "../lib/stringHelpers";
+import { hashAuth } from "../lib/supabaseClient";
+import { Database } from "../supabase/database.types";
 import {
   User,
   createServerSupabaseClient,
@@ -11,9 +11,9 @@ import {
 } from "@supabase/auth-helpers-nextjs";
 
 import { GetServerSidePropsContext } from "next";
-import { useKeys } from "../../lib/useKeys";
-import KeyPage from "../../components/templates/settings/keys/keyPage";
-import BasePage from "../../components/shared/basePage";
+import { useKeys } from "../lib/useKeys";
+import KeyPage from "../components/templates/keys/keyPage";
+import BasePage from "../components/shared/basePage";
 
 interface KeysProps {}
 
