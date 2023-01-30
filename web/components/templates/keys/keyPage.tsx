@@ -116,6 +116,7 @@ const KeyPage = (props: KeyPageProps) => {
             </div>
             <div className="relative mt-1 flex items-center">
               <input
+                readOnly
                 value={hashedApiKey}
                 type="text"
                 name="hashedKey"
