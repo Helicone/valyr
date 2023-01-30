@@ -15,9 +15,11 @@ const HomePage = (props: HomePageProps) => {
   return (
     <BasePage>
       <div className="h-4/5 justify-center align-middle items-left flex flex-col space-y-4">
-        <p className="text-5xl sm:text-6xl font-serif">Valyr</p>
-        <p className="text-3xl sm:text-4xl font-sans font-light">
-          Simplify GPT-3 observability with{" "}
+        <p className="text-4xl sm:text-5xl font-serif">
+          Observe your GPT-3 logs
+        </p>
+        <p className="text-2xl sm:text-3xl font-sans font-light">
+          Track usage, costs, and latency metrics with{" "}
           <span className="bg-sky-300 py-0.5 px-1.5 rounded-sm font-bold">
             one
           </span>{" "}

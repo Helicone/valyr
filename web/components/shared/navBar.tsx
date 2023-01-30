@@ -63,9 +63,12 @@ const NavBar = (props: NavBarProps) => {
             <div className="flex h-16 justify-between">
               <div className="flex">
                 <div className="flex flex-shrink-0 items-center">
-                  <div className="text-lg border border-black p-2 rounded-lg font-serif">
-                    Helicone
-                  </div>
+                  <button
+                    onClick={() => router.push("/")}
+                    className="text-lg border border-black p-2 rounded-lg font-serif"
+                  >
+                    Valyr
+                  </button>
                 </div>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:items-center">
