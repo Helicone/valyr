@@ -146,7 +146,7 @@ const KeyPage = (props: KeyPageProps) => {
               href="https://docs.valyrai.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="underline flex flex-row"
+              className="underline inline-flex flex-row w-fit"
             >
               <p>Learn More</p>
               <ArrowTopRightOnSquareIcon className="h-4 w-4 mt-0.5 ml-0.5" />

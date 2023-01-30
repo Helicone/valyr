@@ -89,7 +89,7 @@ const LeftNavLayout = (props: LeftNavLayoutProps) => {
             ))}
           </nav>
         </div>
-        <div className="h-full flex flex-col p-6 w-full bg-gray-50">
+        <div className="h-full flex flex-col p-4 w-full bg-gray-50">
           <p className="text-3xl font-semibold pb-4">{getTitle()}</p>
           {children}
         </div>
