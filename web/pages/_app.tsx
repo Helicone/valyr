@@ -21,6 +21,7 @@ export default function MyApp({
   // Create a new supabase browser client on every first render.
   const [supabaseClient] = useState(() => createBrowserSupabaseClient());
   if (typeof window !== "undefined") {
+    window.location.href = "https://helicone.ai";
     document.documentElement.classList.add("dark");
   }
 
